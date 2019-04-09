@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="java,springmvc,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="SpringMVC 实现文件下载文件利用程序实现下载需要设置两个报头：  1．Web服务器需要告诉浏览器其所输出内容的类型不是普通文本文件或HTML文件，而是一个要保存到本地的下载文件。设置Content-Type 的值为：application/x-msdownload。 2．Web服务器希望浏览器不直接处理相应的实体内容，而是由用户选择将相应的实体内容保存到一个文件中，这需要设置Content">
+<meta name="keywords" content="java,springmvc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2019/04/03/hello-world/index.html">
+<meta property="og:title" content="SpringMVC文件下载的两种方式">
+<meta property="og:url" content="http://yoursite.com/2019/04/09/springmvcdownload/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="SpringMVC 实现文件下载文件利用程序实现下载需要设置两个报头：  1．Web服务器需要告诉浏览器其所输出内容的类型不是普通文本文件或HTML文件，而是一个要保存到本地的下载文件。设置Content-Type 的值为：application/x-msdownload。 2．Web服务器希望浏览器不直接处理相应的实体内容，而是由用户选择将相应的实体内容保存到一个文件中，这需要设置Content">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-03T15:05:48.931Z">
+<meta property="og:updated_time" content="2019-04-09T08:58:02.648Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="SpringMVC文件下载的两种方式">
+<meta name="twitter:description" content="SpringMVC 实现文件下载文件利用程序实现下载需要设置两个报头：  1．Web服务器需要告诉浏览器其所输出内容的类型不是普通文本文件或HTML文件，而是一个要保存到本地的下载文件。设置Content-Type 的值为：application/x-msdownload。 2．Web服务器希望浏览器不直接处理相应的实体内容，而是由用户选择将相应的实体内容保存到一个文件中，这需要设置Content">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/03/hello-world/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/09/springmvcdownload/">
 
 
 
 
 
-  <title>Hello World | L</title>
+  <title>SpringMVC文件下载的两种方式 | L</title>
   
 
 
@@ -262,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/03/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/springmvcdownload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Li">
@@ -279,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">SpringMVC文件下载的两种方式</h1>
         
 
         <div class="post-meta">
@@ -291,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-03T23:05:48+08:00">
-                2019-04-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T16:55:39+08:00">
+                2019-04-09
               </time>
             
 
@@ -302,6 +303,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -309,7 +332,7 @@
 
           
           
-             <span id="/2019/04/03/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
+             <span id="/2019/04/09/springmvcdownload/" class="leancloud_visitors" data-flag-title="SpringMVC文件下载的两种方式">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -345,15 +368,18 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h3 id="SpringMVC-实现文件下载文件"><a href="#SpringMVC-实现文件下载文件" class="headerlink" title="SpringMVC 实现文件下载文件"></a>SpringMVC 实现文件下载文件</h3><p>利用程序实现下载需要设置两个报头：</p>
+<ul>
+<li>1．Web服务器需要告诉浏览器其所输出内容的类型不是普通文本文件或HTML文件，而是一个要保存到本地的下载文件。设置Content-Type 的值为：application/x-msdownload。</li>
+<li>2．Web服务器希望浏览器不直接处理相应的实体内容，而是由用户选择将相应的实体内容保存到一个文件中，这需要设置Content-Disposition报头。该报头指定了接收程序处理数据内容的方式，在HTTP应用中只有attachment是标准方式，attachment表示要求用户干预。在attachment后面还可以指定filename参数，该参数是服务器建议浏览器将实体内容保存到文件中的文件名称。</li>
+</ul>
+<a id="more"></a>
+<h4 id="浏览文件"><a href="#浏览文件" class="headerlink" title="浏览文件"></a>浏览文件</h4><p>提供一个页面浏览文件目录，如果不清楚应该在哪存放文件，可以先输出realpath，再进入目录新建文件夹以及存放部分文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;file/show&quot;)</span><br><span class="line">public String show(HttpServletRequest request, Model model) &#123;</span><br><span class="line">	System.out.println(&quot;请求文件查看&quot;);</span><br><span class="line">	String realpath = request.getServletContext().getRealPath(&quot;&quot;) + &quot;fileUpload\\temp\\&quot;;</span><br><span class="line">	File dir = new File(realpath);</span><br><span class="line">	File files[] = dir.listFiles();</span><br><span class="line">	// 获取该目录下的所有文件名</span><br><span class="line">	ArrayList&lt;String&gt; fileName = new ArrayList&lt;String&gt;();</span><br><span class="line">	for (int i = 0; i &lt; files.length; i++) &#123;</span><br><span class="line"></span><br><span class="line">		fileName.add(files[i].getName());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	model.addAttribute(&quot;files&quot;, fileName);</span><br><span class="line">	return &quot;showDownFiles&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>浏览文件jsp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;</span><br><span class="line">	pageEncoding=&quot;UTF-8&quot;%&gt;</span><br><span class="line">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;</span><br><span class="line">&lt;%</span><br><span class="line">	String path = request.getContextPath();</span><br><span class="line">	String basePath = request.getScheme() + &quot;://&quot; + request.getServerName() + &quot;:&quot; + request.getServerPort()</span><br><span class="line">			+ path + &quot;/&quot;;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;</span><br><span class="line">&lt;title&gt;Insert title here&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;c:forEach var=&quot;filename&quot; items=&quot;$&#123;files&#125;&quot;&gt;</span><br><span class="line">		&lt;a href=&quot;$&#123;pageContext.request.contextPath &#125;/file/down2?filename=$&#123;filename&#125;&quot;&gt;$&#123;filename&#125;&lt;/a&gt;</span><br><span class="line">		&lt;br /&gt;</span><br><span class="line">	&lt;/c:forEach&gt;</span><br><span class="line">	&lt;br/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：<br><img src alt="borse"></p>
+<h4 id="使用ResponseEntity"><a href="#使用ResponseEntity" class="headerlink" title="使用ResponseEntity"></a>使用ResponseEntity</h4><p>ResponseEntity是一个响应实体，其中包含了返回的头部信息，状态信息以及内容。如下：<br><img src alt="status"><br><img src alt="headerandbody"><br>因此可以将文件解析成二进制流存储进ResponseEntity的body中，同时设置其响应头与状态便可以进行下载。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;/file/down2&quot;)</span><br><span class="line">	public ResponseEntity&lt;byte[]&gt; download(@RequestParam String filename, HttpServletRequest request)</span><br><span class="line">			throws IOException &#123;</span><br><span class="line">		//通过存放文件目录和文件名获取文件全路径</span><br><span class="line">		String filePath = request.getServletContext().getRealPath(&quot;&quot;) + &quot;fileUpload\\temp\\&quot; + filename;</span><br><span class="line">		File file = new File(filePath);</span><br><span class="line">		//定义响应头并设置下载文件报头</span><br><span class="line">		HttpHeaders headers = new HttpHeaders();</span><br><span class="line">		headers.add(&quot;Content-Type&quot;, &quot;application/x-msdownload&quot;);</span><br><span class="line">		headers.add(&quot;Content-Disposition&quot;, &quot;attachment; filename=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;));</span><br><span class="line">		//返回一个响应实体（body，header，status）</span><br><span class="line">		return new ResponseEntity&lt;byte[]&gt;(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的是，使用header的setContentType里面，使用的是MediaType类的常量，其中好像并没有找到”application/x-msdownload”类型，经过网络查询发现使用的是：MediaType.APPLICATION_OCTET_STREAM，不过我测试的时候并没有效果（后来发现是status的问题，使用HttpStatus.OK就可以了），因此采用了add手动添加。<br>还有一点就是，使用ResponseEntity，需要一次性将读取出来，如果文件过大可以就会发生OOM异常。如果只有小文件的传输，可以使用ResponseEntity；一旦文件过大，建议采用下面的方式。不过ResponseEntity的好处就在于简洁，只需要获取文件，设置头，然后封装到ResponseEntity返回。</p>
+<h4 id="使用Java常规方法"><a href="#使用Java常规方法" class="headerlink" title="使用Java常规方法"></a>使用Java常规方法</h4><p>Java常规方式，有点类似json响应，服务器接收用户下载文件请求时，获取响应的输出流，加载服务器的文件作为输入流，然后一边从本地输入，一边向客户端传输。这种方式就有效的解决了文件过大会产生OOM异常的问题。同时，如果客户端的连接异常关闭则会抛出异常，可以进行有效的进行捕获进行处理。也可以扩展下载量统计，断点下载（RandomAccessFile）等功能。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;file/down2&quot;)</span><br><span class="line">	public String down(@RequestParam String filename, HttpServletRequest request, HttpServletResponse response) &#123;</span><br><span class="line">		System.out.println(&quot;请求文件下载&quot;);</span><br><span class="line">		FileInputStream in = null; // 输入流</span><br><span class="line">		ServletOutputStream out = null; // 输出流</span><br><span class="line">		try &#123;</span><br><span class="line">			// 获得文件路径</span><br><span class="line">			String aFilePath = request.getServletContext().getRealPath(&quot;&quot;) + &quot;fileUpload\\temp\\&quot;;</span><br><span class="line">			// 设置下载文件使用的报头</span><br><span class="line">			response.setHeader(&quot;Content-Type&quot;, &quot;application/x-msdownload&quot;);</span><br><span class="line">			response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment; filename=&quot; + URLEncoder.encode(filename, &quot;utf-8&quot;));</span><br><span class="line">			// 读入文件</span><br><span class="line">			in = new FileInputStream(aFilePath + &quot;\\&quot; + filename);</span><br><span class="line">			// 得到响应对象的输出流，用于向客户端输出二进制数据</span><br><span class="line">			out = response.getOutputStream();</span><br><span class="line">			out.flush();</span><br><span class="line">			int len = 0;</span><br><span class="line">			byte b[] = new byte[1024];</span><br><span class="line">			while ((len = in.read(b)) != -1 &amp; in != null) &#123;</span><br><span class="line">				out.write(b, 0, len);</span><br><span class="line">			&#125;</span><br><span class="line">			out.flush();</span><br><span class="line"></span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			try &#123;</span><br><span class="line">				in.close();</span><br><span class="line">			&#125; catch (IOException e1) &#123;</span><br><span class="line">			&#125;</span><br><span class="line">			try &#123;</span><br><span class="line">				out.close();</span><br><span class="line">			&#125; catch (IOException e1) &#123;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return null;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -369,6 +395,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springmvc/" rel="tag"># springmvc</a>
+          
+        </div>
+      
 
       
       
@@ -378,15 +412,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/04/08/SpringMVCFileUpload/" rel="next" title="SpringMVC文件上传 原理与实例">
+                <i class="fa fa-chevron-left"></i> SpringMVC文件上传 原理与实例
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/06/create-hexo1/" rel="prev" title="利用Hexo+Github完成搭建个人博客（1-搭建）">
-                利用Hexo+Github完成搭建个人博客（1-搭建） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -560,7 +594,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringMVC-实现文件下载文件"><span class="nav-number">1.</span> <span class="nav-text">SpringMVC 实现文件下载文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览文件"><span class="nav-number">1.1.</span> <span class="nav-text">浏览文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ResponseEntity"><span class="nav-number">1.2.</span> <span class="nav-text">使用ResponseEntity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Java常规方法"><span class="nav-number">1.3.</span> <span class="nav-text">使用Java常规方法</span></a></li></ol></li></ol></div>
             
 
           </div>
