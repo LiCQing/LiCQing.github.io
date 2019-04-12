@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="springmvc,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SpringMVC 拦截器浅析与实例拦截器的作用，类似于传统servlet的过滤器Filter，在执行请求时，做出预处理，与后处理。不过拦截器中，还有一个中处理（暂且这么称呼）。过滤器我们通常用来执行权限验证，统计访问，计算处理时间等等。拦截器也一样，下面先看看DispatchServlet中拦截器的参与过程。">
+<meta name="keywords" content="springmvc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC 拦截器浅析与实例">
+<meta property="og:url" content="http://yoursite.com/2019/04/12/interceptor/index.html">
+<meta property="og:site_name" content="L">
+<meta property="og:description" content="SpringMVC 拦截器浅析与实例拦截器的作用，类似于传统servlet的过滤器Filter，在执行请求时，做出预处理，与后处理。不过拦截器中，还有一个中处理（暂且这么称呼）。过滤器我们通常用来执行权限验证，统计访问，计算处理时间等等。拦截器也一样，下面先看看DispatchServlet中拦截器的参与过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/dis.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/source.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/excution.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/excution2.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/excution3.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/excution4.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/handlerInterceptor.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/nologin.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/login.jpg">
+<meta property="og:updated_time" content="2019-04-12T07:32:55.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC 拦截器浅析与实例">
+<meta name="twitter:description" content="SpringMVC 拦截器浅析与实例拦截器的作用，类似于传统servlet的过滤器Filter，在执行请求时，做出预处理，与后处理。不过拦截器中，还有一个中处理（暂且这么称呼）。过滤器我们通常用来执行权限验证，统计访问，计算处理时间等等。拦截器也一样，下面先看看DispatchServlet中拦截器的参与过程。">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/12/interceptor/dis.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/12/interceptor/">
+
+
+
+
+
+  <title>SpringMVC 拦截器浅析与实例 | L</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">L</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">栗子树上苹果花</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/12/interceptor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringMVC 拦截器浅析与实例</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-12T15:27:18+08:00">
+                2019-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/springmvc/" itemprop="url" rel="index">
+                    <span itemprop="name">springmvc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/04/12/interceptor/" class="leancloud_visitors" data-flag-title="SpringMVC 拦截器浅析与实例">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="SpringMVC-拦截器浅析与实例"><a href="#SpringMVC-拦截器浅析与实例" class="headerlink" title="SpringMVC 拦截器浅析与实例"></a>SpringMVC 拦截器浅析与实例</h3><p>拦截器的作用，类似于传统servlet的过滤器Filter，在执行请求时，做出预处理，与后处理。不过拦截器中，还有一个中处理（暂且这么称呼）。过滤器我们通常用来执行权限验证，统计访问，计算处理时间等等。拦截器也一样，下面先看看DispatchServlet中拦截器的参与过程。</p>
+<a id="more"></a>
+<p><img src="dis.jpg" alt="参与过程"></p>
+<h4 id="源码预览"><a href="#源码预览" class="headerlink" title="源码预览"></a>源码预览</h4><h5 id="doDispatch"><a href="#doDispatch" class="headerlink" title="doDispatch"></a>doDispatch</h5><p>这个方法是SpringMVC前端总控制器处理请求的方法，其中，有关拦截器的代码如下：<br><img src="source.jpg" alt="dis"><br>其中的mappedHandler是一个局部HandlerExecutionChain属性，保存了真正的自定义处理器与拦截器链。</p>
+<h5 id="HandlerExecutionChain"><a href="#HandlerExecutionChain" class="headerlink" title="HandlerExecutionChain"></a>HandlerExecutionChain</h5><p><img src="excution.jpg" alt="属性"><br>可以看到，其中有一个用来存储自定义的控制器的object，有一个存储拦截器的数组和列表。列表方便添加管理拦截器，数组能够快速通过下标进行访问。然后就有一个整型的下标，这个是用来存储预处理时，处理到了哪一个拦截器的下标。具体使用方法如下。<br><img src="excution2.jpg" alt="三个方法"><br>这几个就是DispatchServlet中调用的方法。<br><img src="excution3.jpg" alt="预处理"><br><img src="excution4.jpg" alt="后处理"><br>通过预处理和后处理的源码，不难看出下标的用途:顺序执行预处理，逆序执行后处理。同理，业是逆序执行中处理。同时，当发生异常时，保证了拦截器能从正确的下标执行后处理。</p>
+<h5 id="HandlerInterceptor"><a href="#HandlerInterceptor" class="headerlink" title="HandlerInterceptor"></a>HandlerInterceptor</h5><p>拦截器的接口，自定义的拦截器需要实现该接口，同时覆写三个方法。<br><img src="handlerInterceptor.jpg" alt="拦截器接口"><br>HandlerExecutionChain中的预处理便是调用了每一个拦截器的实现方法。<br>需要注意的是：预处理中返回的是布尔值，如果返回false，便会使整个doDispatch()方法返回，因此，该处理也就被忽视了。所以在需要返回false值之前，指定重定向的页面。不然就会显示一片空白。</p>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><h5 id="登陆控制器"><a href="#登陆控制器" class="headerlink" title="登陆控制器"></a>登陆控制器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author !N</span><br><span class="line"> * 2019年4月11日</span><br><span class="line"> */</span><br><span class="line">@Controller</span><br><span class="line">public class LoginController &#123;</span><br><span class="line">	@RequestMapping(&quot;/login&quot;)</span><br><span class="line">	public String login(User user,HttpSession session,HttpServletRequest request,HttpServletResponse res)&#123;</span><br><span class="line">		System.out.println(&quot;请求登陆&quot;);</span><br><span class="line">		</span><br><span class="line">		if(user.getName().equals(&quot;user&quot;) &amp;&amp; user.getPwd().equals(&quot;123&quot;))&#123;</span><br><span class="line">			session.setAttribute(&quot;user&quot;, user);</span><br><span class="line">			return &quot;redirect:/toindex&quot;;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		return &quot;redirect:/toindex&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@RequestMapping(&quot;/gotomanage&quot;)</span><br><span class="line">	public String managerPage()&#123;</span><br><span class="line">		System.out.println(&quot;自定义处理器&quot;);</span><br><span class="line">		return &quot;manage&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@RequestMapping(&quot;/toindex&quot;)</span><br><span class="line">	public String toIndex()&#123;</span><br><span class="line">		return &quot;redirect:/index.jsp&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假定测试用户名和密码。<br>利用session记录用户登陆状态。<br>使用重定向返回首页（正常登陆成功之后跳转到其他页面，直接返回就好了）。</p>
+<h5 id="自定义拦截器"><a href="#自定义拦截器" class="headerlink" title="自定义拦截器"></a>自定义拦截器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author !N</span><br><span class="line"> * 2019年4月11日</span><br><span class="line"> * 权限拦截器</span><br><span class="line"> */</span><br><span class="line">public class PermissionInterceptor implements HandlerInterceptor&#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)</span><br><span class="line">			throws Exception &#123;</span><br><span class="line">		System.out.println(&quot;Permision： 预处理，请求路径：&quot; + request.getRequestURI());</span><br><span class="line">	</span><br><span class="line">		if(request.getSession().getAttribute(&quot;user&quot;)!=null)&#123;</span><br><span class="line">			System.out.println(&quot;已经登陆&quot;);</span><br><span class="line">			return true;</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(&quot;未登陆，跳转到首页&quot;);</span><br><span class="line">		response.sendRedirect(request.getContextPath() +&quot;/index.jsp&quot;);</span><br><span class="line">		return false;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,</span><br><span class="line">			ModelAndView modelAndView) throws Exception &#123;</span><br><span class="line">		System.out.println(&quot;=== 中处理  Post===&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)</span><br><span class="line">			throws Exception &#123;</span><br><span class="line">		System.out.println(&quot;=== 后处理 After===&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用session中的参数判断是否登陆。</p>
+<h5 id="jsp页面"><a href="#jsp页面" class="headerlink" title="jsp页面"></a>jsp页面</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;gotomanage&quot;&gt;进入后台&lt;/a&gt;</span><br><span class="line">&lt;br/&gt;</span><br><span class="line">&lt;form action=&quot;login&quot; method=&quot;post&quot;&gt;</span><br><span class="line">   &lt;input type=&quot;text&quot; name=&quot;name&quot;&gt;</span><br><span class="line">   &lt;input type=&quot;password&quot; name=&quot;pwd&quot; &gt;</span><br><span class="line">   &lt;input type = &quot;submit&quot; value=&quot;login&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><p>在配置servlet-web的文件中添加如下配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;mvc:interceptors&gt;</span><br><span class="line">	&lt;mvc:interceptor&gt;</span><br><span class="line">		&lt;!-- 配置拦截器需要拦截的路径 --&gt;</span><br><span class="line">		&lt;mvc:mapping path=&quot;/**&quot; /&gt;</span><br><span class="line">		&lt;!-- 配置不需要拦截作用的路径 --&gt;</span><br><span class="line">		&lt;mvc:exclude-mapping path=&quot;/login&quot; /&gt;</span><br><span class="line">		&lt;mvc:exclude-mapping path=&quot;/toindex&quot; /&gt;</span><br><span class="line">		&lt;!-- 使用哪个拦截器 --&gt;</span><br><span class="line">		&lt;bean class=&quot;com.jsu.handlernterceptor.PermissionInterceptor&quot; /&gt;</span><br><span class="line">	&lt;/mvc:interceptor&gt;</span><br><span class="line">&lt;/mvc:interceptors&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果有异常可以更换如下xml文档头<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</span><br><span class="line">	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;</span><br><span class="line">	xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;</span><br><span class="line">	xsi:schemaLocation=&quot;</span><br><span class="line">    	http://www.springframework.org/schema/beans </span><br><span class="line">    	http://www.springframework.org/schema/beans/spring-beans.xsd</span><br><span class="line">        http://www.springframework.org/schema/context </span><br><span class="line">        http://www.springframework.org/schema/context/spring-context.xsd</span><br><span class="line">        http://www.springframework.org/schema/mvc </span><br><span class="line">        http://www.springframework.org/schema/mvc/spring-mvc.xsd&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h5><p>未登陆点击首页的进入后台<br><img src="nologin.jpg" alt="被拦截"><br>登陆后点击进入后台（自己新建文件）<br><img src="login.jpg" alt="未拦截"></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>拦截器有三个处理过程（前，中，后），分别在处理器之前；处理器后，视图解析前；视图解析后。</li>
+<li>被拦截需要设置重定向加载页面。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springmvc/" rel="tag"># springmvc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/09/springmvcdownload/" rel="next" title="SpringMVC文件下载的两种方式">
+                <i class="fa fa-chevron-left"></i> SpringMVC文件下载的两种方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Li">
+            
+              <p class="site-author-name" itemprop="name">Li</p>
+              <p class="site-description motion-element" itemprop="description">废宅一个</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yourname" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yourname@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="link" target="_blank" title="΢��">
+                      
+                        <i class="fa fa-fw fa-weibo"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com/" title="baidu" target="_blank">baidu</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://11.tt/" title="Miaia" target="_blank">Miaia</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringMVC-拦截器浅析与实例"><span class="nav-number">1.</span> <span class="nav-text">SpringMVC 拦截器浅析与实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#源码预览"><span class="nav-number">1.1.</span> <span class="nav-text">源码预览</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#doDispatch"><span class="nav-number">1.1.1.</span> <span class="nav-text">doDispatch</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HandlerExecutionChain"><span class="nav-number">1.1.2.</span> <span class="nav-text">HandlerExecutionChain</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HandlerInterceptor"><span class="nav-number">1.1.3.</span> <span class="nav-text">HandlerInterceptor</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用示例"><span class="nav-number">1.2.</span> <span class="nav-text">使用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#登陆控制器"><span class="nav-number">1.2.1.</span> <span class="nav-text">登陆控制器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自定义拦截器"><span class="nav-number">1.2.2.</span> <span class="nav-text">自定义拦截器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#jsp页面"><span class="nav-number">1.2.3.</span> <span class="nav-text">jsp页面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置文件"><span class="nav-number">1.2.4.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#运行结果"><span class="nav-number">1.2.5.</span> <span class="nav-text">运行结果</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      <i class="fa fa-user"></i>
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Lf7kSjF7Pbefmd2Kms5NThPR-gzGzoHsz", "WrPVsUGyprFUDyTAHPBRUEfE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.4"></script>
+
+
+</body>
+</html>
