@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法,动态规划,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言动态规划在《数据结构与算法》中接触过，随后在《软件设计师教程》中也学习过，每次学完没有做记录，感觉会了，但实际上还是有些不理解的。这次在《图解算法》中重新接触到动态规划，讲得挺透彻的，应该要好好记录下来。无论动态规划的问题有多么形式多样，只要了解了解题思路和原理。再多加练习，肯定能掌握的。 基本思想 其基本思想是将待求解的问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解">
+<meta name="keywords" content="算法,动态规划">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态规划分析步骤与代码（背包、最大公共子串）">
+<meta property="og:url" content="http://yoursite.com/2019/04/14/DynamicProgramming/index.html">
+<meta property="og:site_name" content="L">
+<meta property="og:description" content="前言动态规划在《数据结构与算法》中接触过，随后在《软件设计师教程》中也学习过，每次学完没有做记录，感觉会了，但实际上还是有些不理解的。这次在《图解算法》中重新接触到动态规划，讲得挺透彻的，应该要好好记录下来。无论动态规划的问题有多么形式多样，只要了解了解题思路和原理。再多加练习，肯定能掌握的。 基本思想 其基本思想是将待求解的问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/nagquestion.jpg">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/table.jpg">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/公式.jpg">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/result.jpg">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/exm.jpg">
+<meta property="og:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/res.jpg">
+<meta property="og:updated_time" content="2019-04-14T11:36:39.799Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="动态规划分析步骤与代码（背包、最大公共子串）">
+<meta name="twitter:description" content="前言动态规划在《数据结构与算法》中接触过，随后在《软件设计师教程》中也学习过，每次学完没有做记录，感觉会了，但实际上还是有些不理解的。这次在《图解算法》中重新接触到动态规划，讲得挺透彻的，应该要好好记录下来。无论动态规划的问题有多么形式多样，只要了解了解题思路和原理。再多加练习，肯定能掌握的。 基本思想 其基本思想是将待求解的问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解">
+<meta name="twitter:image" content="d:/CODE/bolg2/source/_posts/DynamicProgramming/nagquestion.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/14/DynamicProgramming/">
+
+
+
+
+
+  <title>动态规划分析步骤与代码（背包、最大公共子串） | L</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">L</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">栗子树上苹果花</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/14/DynamicProgramming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">动态规划分析步骤与代码（背包、最大公共子串）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T21:26:24+08:00">
+                2019-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/04/14/DynamicProgramming/" class="leancloud_visitors" data-flag-title="动态规划分析步骤与代码（背包、最大公共子串）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>动态规划在《数据结构与算法》中接触过，随后在《软件设计师教程》中也学习过，每次学完没有做记录，感觉会了，但实际上还是有些不理解的。这次在《图解算法》中重新接触到动态规划，讲得挺透彻的，应该要好好记录下来。无论动态规划的问题有多么形式多样，只要了解了解题思路和原理。再多加练习，肯定能掌握的。</p>
+<h4 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h4><blockquote>
+<p>其基本思想是将待求解的问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解。</p>
+</blockquote>
+<p>这是《软件设计师教程》中对动态规划思想的描述。看起来很简单，就把大问题划成小问题。恰恰难的也就是如何将大问题化解成小问题。通过这篇文章，来慢慢体会这个划分的过程。</p>
+<a id="more"></a>
+<h4 id="经典背包问题"><a href="#经典背包问题" class="headerlink" title="经典背包问题"></a>经典背包问题</h4><p><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\nagquestion.jpg" alt="背包"><br>背包可以装 4 磅；<br>音响 3000元，4磅；<br>笔记本电脑，2000元，3磅；<br>吉他，1500元，1磅。<br>书中是直接提供的自底向上解题的过程。<br>在这里我们先从上至下分析一下问题：</p>
+<h5 id="拿还是不拿？"><a href="#拿还是不拿？" class="headerlink" title="拿还是不拿？"></a>拿还是不拿？</h5><p>对于每一个物品，我们都有两个选择，拿或者不拿。我们需要解决的是：拿哪些能达到最高价值？</p>
+<p>现在我们什么都没拿，0价值，4磅空间。我们先考虑吉他：</p>
+<blockquote>
+<p>拿吉他：现在背包价值1500，剩余空间3磅。<br>不拿吉他：背包价值0，剩余空间4磅。</p>
+</blockquote>
+<p>然后在拿或不拿的基础上考虑音响，<br>拿了吉他，价值1500元，剩余3磅空间：</p>
+<blockquote>
+<p>拿音响：音响占用空间4磅 &gt; 剩余空间3磅，所以拿不下。现在背包价值1500，剩余3磅空间。<br>不拿音响：和原来一样，背包价值1500，剩余空间3磅。</p>
+</blockquote>
+<p>不拿吉他，价值0元，剩余4磅空间：</p>
+<blockquote>
+<p>拿音响：背包价值3000，剩余0空间。<br>不拿音响：背包价值0，剩余4空间。</p>
+</blockquote>
+<p>然后在前两者组合的基础上再考虑笔记本电脑，<br>其中组合为：</p>
+<blockquote>
+<p>1.拿了吉他，拿不下音响：剩余3空间<br>2.拿了吉他，不拿音响：剩余3空间<br>3.没拿吉他，拿音响：剩余0空间<br>4.没拿吉他，也没拿音响：剩余4空间</p>
+</blockquote>
+<p>我们发现，1和2剩余的3磅空间刚好再拿个笔记本电脑，且1组合价值最高，而4组合仅拿了电脑，价值为2000，不如1组合。<br>似乎到这里我们仍然得不到什么结论，以上的方法，类似一个排列组合，查看所有的组合方式中的最高价值。但是我们却已经完成了 背包问题的第一步：刻画最优子结构</p>
+<blockquote>
+<p>拿了某物品，和剩下空间的最优解<br>不拿某物品，和剩下空间的最优解</p>
+</blockquote>
+<h5 id="一点一点挤"><a href="#一点一点挤" class="headerlink" title="一点一点挤"></a>一点一点挤</h5><p>我们完成了从上到下的分析，子问题是在剩下的空间里选择最值钱的物品。然后考虑第二步：合并子问题，也就是自下而上合并。</p>
+<blockquote>
+<p>假如剩下1空间，我们拿什么最划算？<br>假如剩下2空间，我们拿什么最划算？<br>……</p>
+</blockquote>
+<p>因此我们需要画一个表格用来记录子问题的最优解：<br><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\table.jpg" alt></p>
+<blockquote>
+<p>行：当前行和之前行表示可以选择的物品<br>列：表示背包的剩余空间</p>
+</blockquote>
+<p>因为我们考虑的是剩余空间，因此填充列：<br>剩余空间1：很明显，剩余空间1时，我们只能拿吉他，因此在第一列，我们填入吉他与价格：</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>吉他（G）</td>
+<td>1500 （G）</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>音响（S）</td>
+<td>1500 （G）</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>笔记本 (C)</td>
+<td>1500 （G）</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>剩余空间2：我们仍然不能拿其他的物品，因此在第二列，我们填入吉他与价格：</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>吉他（G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>音响（S）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>笔记本 (C)</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>剩余空间3：在这里，我们发现，当遇到笔记本电脑时，可以装下而且比吉他价格高，因此我们在笔记本行填入笔记本：</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>吉他（G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td></td>
+</tr>
+<tr>
+<td>音响（S）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td></td>
+</tr>
+<tr>
+<td>笔记本 (C)</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>2000 （C）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>剩余空间4：在这里我们又发现，遇到音响时，可以装下，且价格为3000：</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>吉他（G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+</tr>
+<tr>
+<td>音响（S）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>3000 （S）</td>
+</tr>
+<tr>
+<td>笔记本 (C)</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>2000 （C）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>最后一格怎么办呢，现在最大价格是3000，如果拿电脑，就装不下音响，价值只有2000，价值没有之前高。但 如果拿电脑，背包则还可以装1空间的物品。因此我们看看空间剩1时，可以装的最高价格是什么东西。我们之前表中已经填过，是吉他。且笔记本+吉他的价格为3500，超过了音响的价格。所以我们在最后一格中填入</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>吉他（G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+</tr>
+<tr>
+<td>音响（S）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>3000 （S）</td>
+</tr>
+<tr>
+<td>笔记本 (C)</td>
+<td>1500 （G）</td>
+<td>1500 （G）</td>
+<td>2000 （C）</td>
+<td>3500（C/G）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>在这里我们发现，如果可选择的物品重量大于剩余空间时，是不能放入背包的。而当前可选物品可以放进去时，就需要进行比较。那么，是比较什么呢？至此，我们可以得到计算剩余空间最大价值的公式 ：</p>
+<p><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\公式.jpg" alt></p>
+<p>因为当前行是需要选择是否拿的物品，所以使用上一行的值作为参照。</p>
+<p>比如第三行3列：笔记本，剩余空间3时，就要选择比较：</p>
+<blockquote>
+<p>拿：放下吉他，价值2000，剩余空间0<br>不拿：价值1500，剩余空间3</p>
+</blockquote>
+<p>显而易见，拿比不拿价格高。</p>
+<p>音响同理；</p>
+<p>在比如第三行3列：笔记本，剩余空间4时，选择比较如下：</p>
+<blockquote>
+<p>拿：放下音响，价值2000，剩余空间1。还可以拿吉他，一共价值3500<br>不拿：价值3000，剩余空间0</p>
+</blockquote>
+<p>显而易见，拿比不拿价格高。</p>
+<h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">//填表计算 最优解</span><br><span class="line">int** KnapsackDP(int n,int W,int* weights,int* values)</span><br><span class="line">&#123;</span><br><span class="line">    int i,w;</span><br><span class="line">    //因为数组下标是从0开始且需要用上一行做基础，所以 n+1 ， w + 1</span><br><span class="line">    int **c = (int **)malloc(sizeof(int *) * (n+1));</span><br><span class="line">    for(i=0; i&lt;=n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i]=(int *)malloc(sizeof(int)*(W+1));</span><br><span class="line"></span><br><span class="line">        //初始化所有格子为0</span><br><span class="line">        for(w = 0 ; w&lt;=W ; w++)</span><br><span class="line">            c[i][w] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //从最小空间开始</span><br><span class="line">    for(w= 1 ; w &lt;= W ; w++)</span><br><span class="line">    &#123;   //所有物品</span><br><span class="line">        for(i = 1 ; i&lt;=n ; i++)</span><br><span class="line">        	//判断当前物品是否放得下</span><br><span class="line">            if(weights[i-1] &lt;= w)</span><br><span class="line">            &#123;	</span><br><span class="line">            	//比较放和不放的价值</span><br><span class="line">                if(values[i-1] + c[i-1][w - weights[i-1]] &gt; c[i-1][w])</span><br><span class="line">                	//放，价值为当前物品的价值加上剩余空间的最大价值</span><br><span class="line">                    c[i][w] = values[i-1] + c[i-1][w-weights[i-1]];</span><br><span class="line">                else</span><br><span class="line">                    c[i][w] = c[i-1][w];</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;  //放不下，直接沿用之前的</span><br><span class="line">                c[i][w] = c[i-1][w];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    return c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//根据最优解值找最优解序列</span><br><span class="line">void OutputKnapsackDP(int n,int W , int* Weights,int *Values, int **c)&#123;</span><br><span class="line">    int x[n];</span><br><span class="line">    int i;</span><br><span class="line">    for(i = n ; i &gt; 1 ; i--)&#123;</span><br><span class="line">        if(c[i][W] == c[i-1][W])  //判断是否包含该物品</span><br><span class="line">            x[i-1] =0;</span><br><span class="line">        else &#123;</span><br><span class="line">            x[i-1] = 1;</span><br><span class="line">            W = W- Weights[i-1];   //包含，修改背包容量</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if(c[1][W] == 0)  //判断第一个物品是否放入</span><br><span class="line">        x[0] = 0;</span><br><span class="line">    else</span><br><span class="line">    x[0] = 1;</span><br><span class="line">    for(i = 0 ; i&lt; n ; i ++)&#123;</span><br><span class="line">        if(x[i])</span><br><span class="line">            printf(&quot;Weight:%d , Value %d\n&quot;,Weights[i],Values[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int n = 3,w = 4;</span><br><span class="line">    int weights[4] = &#123;1,4,3&#125;;</span><br><span class="line">    int values[4]= &#123;1500,3000,2000&#125;;</span><br><span class="line">    int** c;</span><br><span class="line">    int i,j;</span><br><span class="line">    c = KnapsackDP(n,w,weights,values);</span><br><span class="line">    for(i = 0 ; i &lt;= n ; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        for(j = 0 ; j &lt;= w  ; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            printf(&quot;%d &quot;, c[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;打印最优结构\n&quot;);</span><br><span class="line">    OutputKnapsackDP(n,w,weights,values,c);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：<br><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\result.jpg" alt="运行结果"></p>
+<h4 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h4><p>《软件设计师教程》中的描述：</p>
+<blockquote>
+<p>子序列是指从给定序列中随意地(不一定是连续的)去掉若干元素后所形成的序列。如X = ABCBDAB , Y = BCDB，则Y是X的一个子序列。若给定两个X和Y，如果Z同时是X和Y的子序列，那称Z是X和Y的公共子序列。最长公共子序列问题定义为：给定序列X和Y，求这两个序列的最长公共子序列。</p>
+</blockquote>
+<p>有点抽象化，所以看起来很费劲，那看一下《图解算法》的例子:<br><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\exm.jpg" alt="exm"><br>那我们怎么猜用户应该输入的是什么呢？<br>是fish？<br>还是vista？</p>
+<p>当然是看和哪个单词重合度更高一点，因此我们便采用最长公共序列算法。</p>
+<h5 id="谁和谁一样"><a href="#谁和谁一样" class="headerlink" title="谁和谁一样"></a>谁和谁一样</h5><p>使用fish和hish不太能体现最长序列的分析，我们采用软考教程的例子：</p>
+<blockquote>
+<p>X = ABCBDAB<br>Y = BDCABA</p>
+</blockquote>
+<p>人工判断的话，自然是先在两个序列中找到第一个相等的，记下来</p>
+<blockquote>
+<p>AB  &amp;  B   -&gt;  B</p>
+</blockquote>
+<p>然后再往后找第二个一样的</p>
+<blockquote>
+<p>C &amp; DC    -&gt;   C<br>也就是 ABC &amp; BDC    - &gt; BC</p>
+</blockquote>
+<p>继续</p>
+<blockquote>
+<p>B &amp; AB  -&gt; B<br>也就是 ABCB  &amp; BDCAB -&gt; BCB</p>
+</blockquote>
+<p>然后</p>
+<blockquote>
+<p>DA &amp; A -&gt; A<br>也就是 ABCBDA &amp; BDCABA  -&gt; BCBA  </p>
+</blockquote>
+<p>Y序列已经没有字符了，所以我们也就找完了。可以发现，后面被寻找的内容都是在前面找到的相等的字母后面，也就是说CBDA &amp; DCABA - &gt; CBA 。都去除一个相同的字母结尾的序列，剩下的公共子串也是其剩余序列的最长公共子串。</p>
+<h5 id="一个一个比"><a href="#一个一个比" class="headerlink" title="一个一个比"></a>一个一个比</h5><p>那计算机应该怎么进行比较呢，它不能像人一样一次比较多个字母，也不知道何时两个字母会相等。所以就要一个一个字母进行比较，同时记录比较情况。</p>
+<blockquote>
+<p>X = FISH<br>Y = HISH</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>F</th>
+<th>I</th>
+<th>S</th>
+<th>H</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>I</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>S</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>H</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>这个表记录的就是子字符串的公共子串字母个数。<br>按行进行分析<br>第一行，H 分别与 F 、 FI  、 FIS  、 FISH 的最大子串<br>第二行，HI 分别与  F 、 FI  、 FIS  、 FISH 的最大子串<br>第三行，HIS 分别与  F 、 FI  、 FIS  、 FISH 的最大子串<br>第四行，HISH 分别与  F 、 FI  、 FIS  、 FISH 的最大子串</p>
+<blockquote>
+<p>按照之前分析的，如果字母相等的话，就去掉相同字母的最长公共子串 + 1 。在不相等的情况下，则需要判断去掉比较双方的其中一个之后哪一个的 值比较大，以记录最长的公共子串。</p>
+</blockquote>
+<p>如</p>
+<blockquote>
+<p>HI &amp; FI :  I 相等，那就 H &amp; F（去掉比较字符I ）的最长公共子串值 0 + 1 。<br>HI &amp; FIS :  I 不等于 S , 选择 HI &amp; FI （去掉 S） 的值 1 与 H &amp; FIS （去掉 I）的值 0 中较大的一个。</p>
+</blockquote>
+<p>依次类推得到下表：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>F</th>
+<th>I</th>
+<th>S</th>
+<th>H</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>I</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>S</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>H</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>这里我们知道了最终结果的值是3，但是好像看不出来公共子串的序列是什么。所以我们需要记录序列路径。</p>
+<blockquote>
+<p>上表示 去掉比较的行字符 比 去掉比较的列字符 更大</p>
+<p>左表示 去掉比较的列字符 比 去掉比较的行字符 更大</p>
+<p>左上表示 比较字符相等，去掉比较字符之后 + 1</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>x</th>
+<th>F</th>
+<th>I</th>
+<th>S</th>
+<th>H</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>y</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>H</td>
+<td>0</td>
+<td>0 ↑</td>
+<td>0 ↑</td>
+<td>0 ↑</td>
+<td>1 ↖</td>
+</tr>
+<tr>
+<td>I</td>
+<td>0</td>
+<td>0 ↑</td>
+<td>1 ↖</td>
+<td>1 ←</td>
+<td>1 ↑</td>
+</tr>
+<tr>
+<td>S</td>
+<td>0</td>
+<td>0 ↑</td>
+<td>1 ↑</td>
+<td>2 ↖</td>
+<td>2 ←</td>
+</tr>
+<tr>
+<td>H</td>
+<td>0</td>
+<td>0 ↑</td>
+<td>1 ↑</td>
+<td>2 ↑</td>
+<td>3 ↖</td>
+</tr>
+</tbody>
+</table>
+<p>这时我们便可以看到，从 H -&gt; S -&gt; I  逆序过来就是最长公共子序列的字母了。</p>
+<h5 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* 求出最长序列</span><br><span class="line">*/</span><br><span class="line">int** Lcs_Lenth(const char * str1, const char * str2, int str1_length, int str2_length)</span><br><span class="line">&#123;</span><br><span class="line">    int i,j;</span><br><span class="line">    //记录最长序列</span><br><span class="line">    int **l= (int **)malloc(sizeof(int *) * (str1_length + 1));</span><br><span class="line">    //记录序列导向</span><br><span class="line">    int **b= (int **)malloc(sizeof(int *) * (str1_length + 1));</span><br><span class="line"></span><br><span class="line">    //分配空间</span><br><span class="line">    for(i = 0 ; i &lt;= str1_length ; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        l[i] = (int *) malloc( sizeof(int *) * str2_length + 1) ;</span><br><span class="line">        b[i] = (int *) malloc( sizeof(int *) * str2_length + 1) ;</span><br><span class="line"></span><br><span class="line">        for(j = 0 ; j &lt;= str2_length ; j ++)</span><br><span class="line">        &#123;</span><br><span class="line">            l[i][j] = 0 ;</span><br><span class="line">            b[i][j] = -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //依次比较</span><br><span class="line">    for(i = 1 ; i &lt;= str1_length ; i++)</span><br><span class="line">        for( j = 1 ; j&lt;=str2_length ; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            //相等</span><br><span class="line">            if(str1[i-1] == str2[j-1])</span><br><span class="line">            &#123;</span><br><span class="line">                l[i][j] = l[i-1][j-1] + 1;  //去掉相同字母，i-1，j-1;</span><br><span class="line">                b[i][j] = 0 ;   //代表左上</span><br><span class="line">            &#125;</span><br><span class="line">            else if(l[i-1][j] &gt;= l[i][j-1])  //去掉行比较字母比较大</span><br><span class="line">            &#123;</span><br><span class="line">                l[i][j] = l[i-1][j];    //行级  i - 1</span><br><span class="line">                b[i][j] = 1;           //代表上方</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                l[i][j] = l[i][j-1];  //列级 j - 1</span><br><span class="line">                b[i][j] = 2;    //代表 右方</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    printf(&quot;输出长度\n&quot;);</span><br><span class="line"></span><br><span class="line">    for(i = 0 ; i &lt;= str1_length ; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        for( j = 0 ; j&lt;=str2_length ; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            printf(&quot;%d &quot;, l[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    printf(&quot;输出导向\n&quot;);</span><br><span class="line"></span><br><span class="line">    for(i = 0 ; i &lt;= str1_length ; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        for( j = 0 ; j&lt;=str2_length ; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            switch(b[i][j])&#123;</span><br><span class="line">            case 0: printf(&quot;↖&quot;); break;</span><br><span class="line">            case 1: printf(&quot;↑&quot;); break;</span><br><span class="line">            case 2: printf(&quot;←&quot;); break;</span><br><span class="line">            default : printf(&quot;0 &quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//递归输出公共子序列序列</span><br><span class="line">void OutputLcs(const char *str1, const int **b, int str1_length, int str2_length )</span><br><span class="line">&#123;</span><br><span class="line">    //直到一个字符串比较完毕</span><br><span class="line">    if(str1_length ==0 || str2_length ==0)</span><br><span class="line">        return ;</span><br><span class="line">    //表示两个字符相等</span><br><span class="line">    if(b[str1_length][str2_length] == 0)</span><br><span class="line">    &#123;   //去掉该字符</span><br><span class="line">        OutputLcs(str1,b,str1_length-1, str2_length - 1 );</span><br><span class="line">        printf(&quot;%c&quot;,str1[str1_length - 1]);</span><br><span class="line">    &#125;</span><br><span class="line">    //表示去掉行级比较大</span><br><span class="line">    else if(b[str1_length][str2_length] == 1)</span><br><span class="line">    &#123;   //去掉其中一个比较字符</span><br><span class="line">        OutputLcs(str1,b,str1_length - 1,str2_length);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;   //去掉另外一个</span><br><span class="line">        OutputLcs(str1,b,str1_length,str2_length - 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    char* str1 = &quot;ABCBDAB&quot;;</span><br><span class="line">    char* str2 = &quot;BDCABA&quot;;</span><br><span class="line">    int** b =Lcs_Lenth(str1,str2,strlen(str1),strlen(str2));</span><br><span class="line">    printf(&quot;输出序列\n&quot;);</span><br><span class="line">    OutputLcs(str1,b,strlen(str1),strlen(str2));</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果如下</p>
+<p><img src="D:\CODE\bolg2\source\_posts\DynamicProgramming\res.jpg" alt="res"></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>动态规划解决的是问题具有最优子结构，总问题的解可以由子问题的解合并得来</li>
+<li>子问题具有重叠性，有许多的子问题是重复的</li>
+<li>采用填表法，即记录子问题的解不再重复结算</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/动态规划/" rel="tag"># 动态规划</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/12/interceptor/" rel="next" title="SpringMVC 拦截器浅析与实例">
+                <i class="fa fa-chevron-left"></i> SpringMVC 拦截器浅析与实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Li">
+            
+              <p class="site-author-name" itemprop="name">Li</p>
+              <p class="site-description motion-element" itemprop="description">废宅一个</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yourname" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yourname@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="link" target="_blank" title="΢��">
+                      
+                        <i class="fa fa-fw fa-weibo"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com/" title="baidu" target="_blank">baidu</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://11.tt/" title="Miaia" target="_blank">Miaia</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本思想"><span class="nav-number">2.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#经典背包问题"><span class="nav-number">3.</span> <span class="nav-text">经典背包问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#拿还是不拿？"><span class="nav-number">3.1.</span> <span class="nav-text">拿还是不拿？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一点一点挤"><span class="nav-number">3.2.</span> <span class="nav-text">一点一点挤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码实现"><span class="nav-number">3.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最长公共子序列"><span class="nav-number">4.</span> <span class="nav-text">最长公共子序列</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#谁和谁一样"><span class="nav-number">4.1.</span> <span class="nav-text">谁和谁一样</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个一个比"><span class="nav-number">4.2.</span> <span class="nav-text">一个一个比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码实现-1"><span class="nav-number">4.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      <i class="fa fa-user"></i>
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Lf7kSjF7Pbefmd2Kms5NThPR-gzGzoHsz", "WrPVsUGyprFUDyTAHPBRUEfE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.4"></script>
+
+
+</body>
+</html>
