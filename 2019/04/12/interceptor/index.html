@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/handlerInterceptor.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/nologin.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/04/12/interceptor/login.jpg">
-<meta property="og:updated_time" content="2019-04-12T07:32:55.173Z">
+<meta property="og:updated_time" content="2019-04-18T06:49:52.200Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC 拦截器浅析与实例">
 <meta name="twitter:description" content="SpringMVC 拦截器浅析与实例拦截器的作用，类似于传统servlet的过滤器Filter，在执行请求时，做出预处理，与后处理。不过拦截器中，还有一个中处理（暂且这么称呼）。过滤器我们通常用来执行权限验证，统计访问，计算处理时间等等。拦截器也一样，下面先看看DispatchServlet中拦截器的参与过程。">
@@ -395,6 +395,7 @@
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
 <li>拦截器有三个处理过程（前，中，后），分别在处理器之前；处理器后，视图解析前；视图解析后。</li>
 <li>被拦截需要设置重定向加载页面。</li>
+<li>拦截器只能拦截请求，不能拦截页面</li>
 </ol>
 
       
@@ -517,7 +518,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -528,7 +529,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -539,7 +540,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
