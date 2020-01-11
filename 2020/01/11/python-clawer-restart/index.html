@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.项目环境基于 Python3.7 ，使用 Scrapy框架，正常抓取某网站搜索指数排名。 2.需求背景由于网络时好时坏，有时候会遇到timeout这种延时错误，出错之后爬虫便会停止，如果没有第一时间重启，或者是排错，抓取效率便会十分低下。所以便想着有没有解决方法（爬虫项目是同事写的，跑在我电脑上，实习生打杂就完事了 3.解决思路 1.利用另外一个Python程序，监控该爬虫进程是否正常进行，同">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Python】如何监控Python爬虫进程，实现异常重启或异常通知？">
+<meta property="og:url" content="http://yoursite.com/2020/01/11/python-clawer-restart/index.html">
+<meta property="og:site_name" content="L">
+<meta property="og:description" content="1.项目环境基于 Python3.7 ，使用 Scrapy框架，正常抓取某网站搜索指数排名。 2.需求背景由于网络时好时坏，有时候会遇到timeout这种延时错误，出错之后爬虫便会停止，如果没有第一时间重启，或者是排错，抓取效率便会十分低下。所以便想着有没有解决方法（爬虫项目是同事写的，跑在我电脑上，实习生打杂就完事了 3.解决思路 1.利用另外一个Python程序，监控该爬虫进程是否正常进行，同">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-11T08:27:28.528Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Python】如何监控Python爬虫进程，实现异常重启或异常通知？">
+<meta name="twitter:description" content="1.项目环境基于 Python3.7 ，使用 Scrapy框架，正常抓取某网站搜索指数排名。 2.需求背景由于网络时好时坏，有时候会遇到timeout这种延时错误，出错之后爬虫便会停止，如果没有第一时间重启，或者是排错，抓取效率便会十分低下。所以便想着有没有解决方法（爬虫项目是同事写的，跑在我电脑上，实习生打杂就完事了 3.解决思路 1.利用另外一个Python程序，监控该爬虫进程是否正常进行，同">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/11/python-clawer-restart/">
+
+
+
+
+
+  <title>【Python】如何监控Python爬虫进程，实现异常重启或异常通知？ | L</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">L</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">栗子树上苹果花</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/11/python-clawer-restart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【Python】如何监控Python爬虫进程，实现异常重启或异常通知？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-11T16:25:22+08:00">
+                2020-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/01/11/python-clawer-restart/" class="leancloud_visitors" data-flag-title="【Python】如何监控Python爬虫进程，实现异常重启或异常通知？">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-项目环境"><a href="#1-项目环境" class="headerlink" title="1.项目环境"></a>1.项目环境</h1><p>基于 Python3.7 ，使用 Scrapy框架，正常抓取某网站搜索指数排名。</p>
+<h1 id="2-需求背景"><a href="#2-需求背景" class="headerlink" title="2.需求背景"></a>2.需求背景</h1><p>由于网络时好时坏，有时候会遇到timeout这种延时错误，出错之后爬虫便会停止，如果没有第一时间重启，或者是排错，抓取效率便会十分低下。所以便想着有没有解决方法（爬虫项目是同事写的，跑在我电脑上，实习生打杂就完事了</p>
+<h1 id="3-解决思路"><a href="#3-解决思路" class="headerlink" title="3.解决思路"></a>3.解决思路</h1><ul>
+<li><p>1.利用另外一个Python程序，监控该爬虫进程是否正常进行，同理也可以扩展到监控其他的程序是否正常运行。</p>
+<ul>
+<li>2.利用Scrapy框架自身提供的中间件进行错误处理</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-1-进程监控"><a href="#3-1-进程监控" class="headerlink" title="3.1 进程监控"></a>3.1 进程监控</h2><p> 实现进程监控需要解决以下问题</p>
+<ol>
+<li>如何用python获取电脑中运行的进程？</li>
+<li><p>如何知道要监控的进程是否存活？</p>
+<p>第一个问题使用python提供的os库可以解决</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.popen(<span class="string">'tasklist'</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>tasklist ： 输出电脑上当前所执行的程序名已经进程编号PID</p>
+</blockquote>
+<p>该方法类似与在cmd命令行下所执行的效果一样，会将在cmd下执行的结果输出到缓冲流，因此我们也需要从缓冲流中把结果读出来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.popen(<span class="string">'tasklist'</span>).<span class="built_in">read</span>()</span><br></pre></td></tr></table></figure>
+<p>第二个问题，我们可以使用新建子进程来解决这个问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">from</span>  scrapy  <span class="keyword">import</span> cmdline</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">execute_spider</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">cmdline</span>.<span class="title">execute</span><span class="params">(<span class="string">'scrapy crawl my_spider'</span>.split<span class="params">()</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">my_pro = Process(target=executeSpider)</span><br><span class="line">my_pro.start()</span><br><span class="line">print(<span class="string">"pid:%s  ="</span> % my_pro.getpid())</span><br><span class="line"><span class="comment"># 在这里可以获得pid,可以使用进程通信方式把pid传递过去，我比较简单，使用的文件存储pid，监控程序读文件就好了</span></span><br></pre></td></tr></table></figure>
+<p>在这里使用<code>getpid()</code>便可以获得该爬虫的进程号，结合之前的命令，便可以知道当前程序是否正常运行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从tasklist的输出中，统计该pid的数量，从而判定该进程是否存在</span></span><br><span class="line"> isAlive = os.popen(<span class="string">'tasklist'</span>).read().count(pid) != <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-2-Scrapy中间件之异常处理"><a href="#3-2-Scrapy中间件之异常处理" class="headerlink" title="3.2 Scrapy中间件之异常处理"></a>3.2 Scrapy中间件之异常处理</h2><p>在Scrapy中存在两种中间件，一种是SpiderMiddleWare（蜘蛛中间件），一种是DownloaderMiddlerWare（下载器中间件）。</p>
+<ul>
+<li>蜘蛛中间件： Scrapy中Engine组件与Spider交互经过的中间件，如果蜘蛛发生的异常，就在这个里面处理，比如在解析数据的时候发生的错误。对应的方法如下：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="string">"""</span></span><br><span class="line"><span class="string">response: 异常被抛出时被处理的response对象 </span></span><br><span class="line"><span class="string">exception: 抛出的异常 </span></span><br><span class="line"><span class="string">spider: 抛出该异常的spider对象 </span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_spider_exception</span><span class="params">(self, response, exception, spider)</span>:</span> </span><br><span class="line">	<span class="comment"># 相应处理</span></span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>下载器中间件：Scrapy中Engine组件与Downloader交互经过的中间件，这个处理的错误一般都是网络问题，或者服务器问题。与自己敲的蜘蛛代码关系不大。（我选的这个<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""" </span></span><br><span class="line"><span class="string">request: 产生异常的request对象 </span></span><br><span class="line"><span class="string">exception: 抛出的异常对象 </span></span><br><span class="line"><span class="string">spider: 产生异常的request对象的spider对象 </span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_exception</span><span class="params">(self, request, exception, spider)</span>:</span> </span><br><span class="line">	<span class="comment"># 相应处理</span></span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果使用中间件，别忘记在setting.py文件中开启中间件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">  <span class="string">'MySpider.middlewares.MyDownloaderMiddleware'</span>: <span class="number">543</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>or 蜘蛛中间件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SPIDER_MIDDLEWARES = &#123;</span><br><span class="line">  <span class="string">'MySpider.middlewares.MySpiderMiddleware'</span>: <span class="number">543</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="4-相应处理"><a href="#4-相应处理" class="headerlink" title="4.相应处理"></a>4.相应处理</h1><p> 现在已经知道进程是否正常、爬虫出错在哪处理。那么如何处理呢？</p>
+<h2 id="4-1-继续运行"><a href="#4-1-继续运行" class="headerlink" title="4.1 继续运行"></a>4.1 继续运行</h2><p> 第一种继续运行的方式，可以使用死循环，也可以使用调度任务。<br> 死循环实现比较简单，在同一个代码中，开启一个进程执行Scrapy爬虫，一个进程实现监控。（不推荐）<br> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#偷懒使用死循环的方式</span></span><br><span class="line"> <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        p = os.popen(<span class="string">'tasklist'</span>)</span><br><span class="line">        pid = getPid() <span class="comment"># 写个读文件的方法</span></span><br><span class="line">        isAlive = p.read().count(pid) != <span class="number">0</span></span><br><span class="line">        count = count +<span class="number">1</span></span><br><span class="line">        print( <span class="string">"%s  %s 次是 %s"</span> %(datetime.datetime.now(),count,isAlive) )</span><br><span class="line">        <span class="keyword">if</span>(isAlive==<span class="literal">False</span>):</span><br><span class="line">            my_pro = Process(target=executeSpider)</span><br><span class="line">			my_pro.start()</span><br><span class="line">			<span class="keyword">with</span> open(<span class="string">"pid.txt"</span>,<span class="string">"w"</span>) <span class="keyword">as</span> f:</span><br><span class="line">				f.write(my_pro.getpid())</span><br><span class="line">        time.sleep(<span class="number">60</span>)</span><br></pre></td></tr></table></figure></p>
+<p>第二种利用中间件返回Request让爬虫继续执行：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_exception</span><span class="params">(self, request, exception, spider)</span>:</span> </span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"exceptionLog.txt"</span>, <span class="string">"a"</span>) <span class="keyword">as</span> f:</span><br><span class="line">           msg = <span class="string">"%s : %s\n"</span> %(datetime.datetime.now(),exception)</span><br><span class="line">           f.write(msg) <span class="comment">#手动记录日志</span></span><br><span class="line"><span class="keyword">return</span> request</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-2-通知"><a href="#4-2-通知" class="headerlink" title="4.2 通知"></a>4.2 通知</h2><p>第一种使用窗口弹出，适合在电脑工作时跑的爬虫，这个窗口提醒会置顶，达到提醒的目的，同时程序也会阻塞，需要确认之后才会继续，当然如果有异常的话，也不需要继续了（不适合打游戏时开<br>需要安装win32库： pip install pywin32<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">win32api.MessageBox(<span class="number">0</span>, <span class="string">"爬虫进程异常，请查看"</span>, <span class="string">"提醒"</span>, win32con.MB_SYSTEMMODAL)</span><br></pre></td></tr></table></figure></p>
+<p>第二种使用邮件通知，适合不在电脑目前时跑的爬虫。<br>（这个参考下一篇博文，封装一个发邮件的类，调用一下便ok。</p>
+<h1 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h1><p>使用一个工具需要慢慢的熟悉，第一个监控进程的方法是在没有弄清有两个中间件导致一直没找到解决方法所想的（囫囵吞枣学了一下Scapy。使用弹窗提醒还可以，同时也可以使用在其他可以在命令行所运行的程序上，见参考博客</p>
+<blockquote>
+<p>借鉴博客如下<br><a href="https://www.jb51.net/article/163273.htm" target="_blank" rel="noopener">https://www.jb51.net/article/163273.htm</a><br><a href="https://blog.csdn.net/weixin_41990342/article/details/81907263" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41990342/article/details/81907263</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/29/install-ubuntu/" rel="next" title="Ubuntu系统安装和设置（资源整合）">
+                <i class="fa fa-chevron-left"></i> Ubuntu系统安装和设置（资源整合）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Li">
+            
+              <p class="site-author-name" itemprop="name">Li</p>
+              <p class="site-description motion-element" itemprop="description">废宅一个</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yourname" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yourname@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="link" target="_blank" title="΢��">
+                      
+                        <i class="fa fa-fw fa-weibo"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.baidu.com/" title="baidu" target="_blank">baidu</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://11.tt/" title="Miaia" target="_blank">Miaia</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-项目环境"><span class="nav-number">1.</span> <span class="nav-text">1.项目环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-需求背景"><span class="nav-number">2.</span> <span class="nav-text">2.需求背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-解决思路"><span class="nav-number">3.</span> <span class="nav-text">3.解决思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-进程监控"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 进程监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Scrapy中间件之异常处理"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Scrapy中间件之异常处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-相应处理"><span class="nav-number">4.</span> <span class="nav-text">4.相应处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-继续运行"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 继续运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-通知"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 通知</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      <i class="fa fa-user"></i>
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Lf7kSjF7Pbefmd2Kms5NThPR-gzGzoHsz", "WrPVsUGyprFUDyTAHPBRUEfE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.4"></script>
+
+
+</body>
+</html>
