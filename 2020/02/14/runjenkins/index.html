@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://yoursite.com/mv.png">
 <meta property="og:image" content="http://yoursite.com/javaversion.png">
 <meta property="og:image" content="http://yoursite.com/mvnv.png">
-<meta property="og:updated_time" content="2020-02-14T14:44:34.988Z">
+<meta property="og:updated_time" content="2020-02-15T10:22:24.686Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="runjenkins">
 <meta name="twitter:description" content="一、Jenkins介绍来自官网的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器JenkinsDoc">
@@ -382,7 +382,8 @@
 <p>3.本篇基于百度云服务器纯净的Centos版本，为后续Jenkins安装部署做铺垫</p>
 <h2 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h2><p>uname -r  查看内核</p>
 <p>前置 sudo yum install -y yum-utils device-mapper-persistent-data lvm2<br>input // already installed and latest version<br>添加国内镜像源 sudo yum-config-manager –add-repo <a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo" target="_blank" rel="noopener">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a><br>更新缓存 sudo yum makecache fast<br>安装docker-ce   sudo yum -y install docker-ce<br>启动dokcer  sudo systemctl start docker<br>测试运行 hello-world： docker run hello-world  #很慢</p>
-<p>修改镜像<br>sudo mkdir -p /etc/docker<br>sudo vim /etc/docker/daemon.json<br>{<br> “registry-mirrors”:[“<a href="http://hub-mirror.c.163.com&quot;]" target="_blank" rel="noopener">http://hub-mirror.c.163.com&quot;]</a><br>}<br>systemctl restart docker<br>一些加速站点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https://registry.docker-cn.com</span><br><span class="line">http://hub-mirror.c.163.com</span><br><span class="line">https://3laho3y3.mirror.aliyuncs.com</span><br><span class="line">http://f1361db2.m.daocloud.io</span><br><span class="line">https://mirror.ccs.tencentyun.com</span><br></pre></td></tr></table></figure></p>
+<p>修改镜像<br>sudo mkdir -p /etc/docker<br>sudo vim /etc/docker/daemon.json<br>{<br> “registry-mirrors”:[“<a href="http://hub-mirror.c.163.com&quot;]" target="_blank" rel="noopener">http://hub-mirror.c.163.com&quot;]</a><br>}<br>systemctl restart docker<br>一些加速站点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https://registry.docker-cn.com</span><br><span class="line">http://hub-mirror.c.163.com</span><br><span class="line">https://3laho3y3.mirror.aliyuncs.com</span><br><span class="line">http://f1361db2.m.daocloud.io</span><br><span class="line">https://mirror.ccs.tencentyun.com</span><br></pre></td></tr></table></figure>
 <p>配置Docker工作空间<br>mkdir /home/work/demo<br>cd /home/work/demo<br>mkdir backup<br>vim Dockerfile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#基于openjdk:8</span><br><span class="line">FROM openjdk:8</span><br><span class="line"></span><br><span class="line">ADD demo-0.0.1-SNAPSHOT.jar demo.jar</span><br><span class="line">RUN bash -c &apos;touch /demo.jar&apos;</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/demo.jar&quot;]</span><br></pre></td></tr></table></figure></p>
 <h2 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h2><p>官网 <a href="https://jenkins.io/zh/" target="_blank" rel="noopener">https://jenkins.io/zh/</a></p>
 <p>安装步骤<br>sudo wget -O /etc/yum.repos.d/jenkins.repo <a href="https://pkg.jenkins.io/redhat-stable/jenkins.repo" target="_blank" rel="noopener">https://pkg.jenkins.io/redhat-stable/jenkins.repo</a><br>sudo rpm –import <a href="https://pkg.jenkins.io/redhat-stable/jenkins.io.key" target="_blank" rel="noopener">https://pkg.jenkins.io/redhat-stable/jenkins.io.key</a><br>yum install jenkins</p>
@@ -506,7 +507,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
