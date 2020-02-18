@@ -79,23 +79,54 @@
 
 
 
-<meta name="description" content="一、Jenkins介绍来自官网的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器JenkinsDoc">
+<meta name="description" content="[TOC] 一、Jenkins介绍来自官网 的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器Jen">
 <meta property="og:type" content="article">
-<meta property="og:title" content="runjenkins">
+<meta property="og:title" content="【Linux】使用Jenkins和Docker集成部署SpringBoot应用">
 <meta property="og:url" content="http://yoursite.com/2020/02/14/runjenkins/index.html">
 <meta property="og:site_name" content="L">
-<meta property="og:description" content="一、Jenkins介绍来自官网的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器JenkinsDoc">
+<meta property="og:description" content="[TOC] 一、Jenkins介绍来自官网 的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器Jen">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/transfJdk.png">
-<meta property="og:image" content="http://yoursite.com/tarzxvf.png">
-<meta property="og:image" content="http://yoursite.com/mv.png">
-<meta property="og:image" content="http://yoursite.com/javaversion.png">
-<meta property="og:image" content="http://yoursite.com/mvnv.png">
-<meta property="og:updated_time" content="2020-02-15T10:22:24.686Z">
+<meta property="og:image" content="http://yoursite.com/jenkinsdown.png">
+<meta property="og:image" content="http://yoursite.com/Jenkinsfail.png">
+<meta property="og:image" content="http://yoursite.com/changejava.png">
+<meta property="og:image" content="http://yoursite.com/inputse.png">
+<meta property="og:image" content="http://yoursite.com/installplug.png">
+<meta property="og:image" content="http://yoursite.com/installplugerror.png">
+<meta property="og:image" content="http://yoursite.com/changesite.png">
+<meta property="og:image" content="http://yoursite.com/openjenkinserror.png">
+<meta property="og:image" content="http://yoursite.com/createuser.png">
+<meta property="og:image" content="http://yoursite.com/gotoconfig.png">
+<meta property="og:image" content="http://yoursite.com/configjdk.png">
+<meta property="og:image" content="http://yoursite.com/getjdkmavenpath.png">
+<meta property="og:image" content="http://yoursite.com/addsvn.png">
+<meta property="og:image" content="http://yoursite.com/sharesvn.png">
+<meta property="og:image" content="http://yoursite.com/commit.png">
+<meta property="og:image" content="http://yoursite.com/shouldcommit.png">
+<meta property="og:image" content="http://yoursite.com/insvn.png">
+<meta property="og:image" content="http://yoursite.com/newtask.png">
+<meta property="og:image" content="http://yoursite.com/general.png">
+<meta property="og:image" content="http://yoursite.com/srouce.png">
+<meta property="og:image" content="http://yoursite.com/creatauth.png">
+<meta property="og:image" content="http://yoursite.com/chufaqi.png">
+<meta property="og:image" content="http://yoursite.com/goujianghuanjing.png">
+<meta property="og:image" content="http://yoursite.com/goujiangxuanzemaven.png">
+<meta property="og:image" content="http://yoursite.com/mavenconfig.png">
+<meta property="og:image" content="http://yoursite.com/execshell.png">
+<meta property="og:image" content="http://yoursite.com/task.png">
+<meta property="og:image" content="http://yoursite.com/detail.png">
+<meta property="og:image" content="http://yoursite.com/workspace.png">
+<meta property="og:image" content="http://yoursite.com/selectConsole.png">
+<meta property="og:image" content="http://yoursite.com/console.png">
+<meta property="og:image" content="http://yoursite.com/runsuccess.png">
+<meta property="og:image" content="http://yoursite.com/webok.png">
+<meta property="og:image" content="http://yoursite.com/添加可执行权限.png">
+<meta property="og:image" content="http://yoursite.com/svncommit.png">
+<meta property="og:image" content="http://yoursite.com/version2.png">
+<meta property="og:updated_time" content="2020-02-18T06:53:03.867Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="runjenkins">
-<meta name="twitter:description" content="一、Jenkins介绍来自官网的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器JenkinsDoc">
-<meta name="twitter:image" content="http://yoursite.com/transfJdk.png">
+<meta name="twitter:title" content="【Linux】使用Jenkins和Docker集成部署SpringBoot应用">
+<meta name="twitter:description" content="[TOC] 一、Jenkins介绍来自官网 的介绍： 作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。 我的理解： 可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。 二、前置准备2.1服务器(Linux)所需环境1234567OS：CentOS7 （买的百度云学生服务器Jen">
+<meta name="twitter:image" content="http://yoursite.com/jenkinsdown.png">
 
 
 
@@ -131,7 +162,7 @@
 
 
 
-  <title>runjenkins | L</title>
+  <title>【Linux】使用Jenkins和Docker集成部署SpringBoot应用 | L</title>
   
 
 
@@ -285,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">runjenkins</h1>
+          <h1 class="post-title" itemprop="name headline">【Linux】使用Jenkins和Docker集成部署SpringBoot应用</h1>
         
 
         <div class="post-meta">
@@ -315,7 +346,7 @@
 
           
           
-             <span id="/2020/02/14/runjenkins/" class="leancloud_visitors" data-flag-title="runjenkins">
+             <span id="/2020/02/14/runjenkins/" class="leancloud_visitors" data-flag-title="【Linux】使用Jenkins和Docker集成部署SpringBoot应用">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -351,47 +382,141 @@
       
 
       
-        <h1 id="一、Jenkins介绍"><a href="#一、Jenkins介绍" class="headerlink" title="一、Jenkins介绍"></a>一、Jenkins介绍</h1><p>来自官网的介绍：</p>
+        <p>[TOC]</p>
+<h1 id="一、Jenkins介绍"><a href="#一、Jenkins介绍" class="headerlink" title="一、Jenkins介绍"></a>一、Jenkins介绍</h1><p>来自<a href="https://jenkins.io/zh/" target="_blank" rel="noopener">官网</a> 的介绍：</p>
 <p>作为一个可扩展的自动化服务器，Jenkins 可以用作简单的 CI 服务器，或者变成任何项目的持续交付中心。</p>
 <p>我的理解：</p>
 <p>可以将代码从SVN或GIT仓库拉取过来进行自动编译与发布，所以可以成为一个交付中心，也可以作为一个集成测试环境。</p>
 <h1 id="二、前置准备"><a href="#二、前置准备" class="headerlink" title="二、前置准备"></a>二、前置准备</h1><h2 id="2-1服务器-Linux-所需环境"><a href="#2-1服务器-Linux-所需环境" class="headerlink" title="2.1服务器(Linux)所需环境"></a>2.1服务器(Linux)所需环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">OS：CentOS7 （买的百度云学生服务器</span><br><span class="line">Jenkins</span><br><span class="line">Docker</span><br><span class="line">Jdk</span><br><span class="line">Maven</span><br><span class="line">SVN</span><br><span class="line">Git(从github拉取代码所需)</span><br></pre></td></tr></table></figure>
-<h2 id="2-2安装JDK与Maven"><a href="#2-2安装JDK与Maven" class="headerlink" title="2.2安装JDK与Maven"></a>2.2安装JDK与Maven</h2><h3 id="2-2-1获取压缩包"><a href="#2-2-1获取压缩包" class="headerlink" title="2.2.1获取压缩包"></a>2.2.1获取压缩包</h3><p>Maven与Jenkins都需要jdk，所以先安装jdk，同时maven与jdk安装步骤大致相同，可以同时操作<br>1.使用ftp传输JDK安装包到linux上 <a href="https://pan.baidu.com/s/1jRbajgzkkXO7GsEvkZx-sA" target="_blank" rel="noopener">某云下载</a>提取码：hm6u<br><img src="/transfJdk.png" alt="transfJdk"></p>
-<p>2.wget方式获取</p>
-<p>以下是jdk的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-cookies --no-check-certificate --header <span class="string">"Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"</span> <span class="string">"http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.tar.gz"</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-2-3-解压"><a href="#2-2-3-解压" class="headerlink" title="2.2.3 解压"></a>2.2.3 解压</h3><p>1.使用<code>tar -zxvf</code> 解压jdk与maven的压缩文件 。输入命令之后，再输入文件名的前面几个字母可以按<code>tab</code>补全；分别解压之后会产生两个文件夹。</p>
-<p><img src="/tarzxvf.png" alt="tarzxvf"></p>
-<p>使用<code>mv</code>命令移动这两个文件夹到指定目录,方便后续配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv apache-maven-3.6.3 /usr/<span class="built_in">local</span>/maven</span><br><span class="line"></span><br><span class="line">mv jdk1.8.0_221 /usr/<span class="built_in">local</span>/jdk8</span><br></pre></td></tr></table></figure>
-<p><img src="/mv.png" alt="mv"></p>
-<p>移动完成之后，可以分别进入查看是否移动了正确的文件</p>
-<h3 id="2-2-4-配置环境变量"><a href="#2-2-4-配置环境变量" class="headerlink" title="2.2.4 配置环境变量"></a>2.2.4 配置环境变量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
-<p>在文件的最后添加上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/jdk8 # 刚刚jdk移动到的目录</span><br><span class="line">export MAVEN_HOME=/usr/local/maven # 刚刚maven移动到的目录</span><br><span class="line">export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$MAVEN_HOME/bin:$PATH</span><br></pre></td></tr></table></figure></p>
-<p>最后使用以下命令使配置生效</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-<p>最后检查是否生效</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java -version <span class="comment">#检查jdk是否安装成功</span></span><br><span class="line"></span><br><span class="line">mvn -v <span class="comment">#检查maven是否安装成功</span></span><br></pre></td></tr></table></figure>
-<p><img src="/javaversion.png" alt="javaversion"><br>maven成功<br><img src="/mvnv.png" alt="mvnv"></p>
-<h3 id="2-2-5问题"><a href="#2-2-5问题" class="headerlink" title="2.2.5问题"></a>2.2.5问题</h3><p>一开始运行java -version的时候报错如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@instance-7k1d5qb8 bin]<span class="comment"># java -version</span></span><br><span class="line">-bash: /usr/<span class="built_in">local</span>/maven/bin/java: /lib/ld-linux.so.2: bad ELF interpreter: No such file or directory</span><br></pre></td></tr></table></figure>
-<p>度娘了一圈，大意是由于系统位数差异，缺少了东西。找到如下解决方法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install glibc.i686</span><br></pre></td></tr></table></figure>
-<h2 id="2-3-总结"><a href="#2-3-总结" class="headerlink" title="2.3 总结"></a>2.3 总结</h2><p>1.安装流程如下：获取压缩包-》解压指定文件位置-》配置环境变量-》刷新环境变量</p>
-<p>2.还有一种安装方法是通过yum源来安装，相当于在windows下的自动安装，如果不熟悉不太方便掌握文件位置</p>
-<p>3.本篇基于百度云服务器纯净的Centos版本，为后续Jenkins安装部署做铺垫</p>
-<h2 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h2><p>uname -r  查看内核</p>
-<p>前置 sudo yum install -y yum-utils device-mapper-persistent-data lvm2<br>input // already installed and latest version<br>添加国内镜像源 sudo yum-config-manager –add-repo <a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo" target="_blank" rel="noopener">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a><br>更新缓存 sudo yum makecache fast<br>安装docker-ce   sudo yum -y install docker-ce<br>启动dokcer  sudo systemctl start docker<br>测试运行 hello-world： docker run hello-world  #很慢</p>
-<p>修改镜像<br>sudo mkdir -p /etc/docker<br>sudo vim /etc/docker/daemon.json<br>{<br> “registry-mirrors”:[“<a href="http://hub-mirror.c.163.com&quot;]" target="_blank" rel="noopener">http://hub-mirror.c.163.com&quot;]</a><br>}<br>systemctl restart docker<br>一些加速站点</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https://registry.docker-cn.com</span><br><span class="line">http://hub-mirror.c.163.com</span><br><span class="line">https://3laho3y3.mirror.aliyuncs.com</span><br><span class="line">http://f1361db2.m.daocloud.io</span><br><span class="line">https://mirror.ccs.tencentyun.com</span><br></pre></td></tr></table></figure>
-<p>配置Docker工作空间<br>mkdir /home/work/demo<br>cd /home/work/demo<br>mkdir backup<br>vim Dockerfile<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#基于openjdk:8</span><br><span class="line">FROM openjdk:8</span><br><span class="line"></span><br><span class="line">ADD demo-0.0.1-SNAPSHOT.jar demo.jar</span><br><span class="line">RUN bash -c &apos;touch /demo.jar&apos;</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/demo.jar&quot;]</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h2><p>官网 <a href="https://jenkins.io/zh/" target="_blank" rel="noopener">https://jenkins.io/zh/</a></p>
-<p>安装步骤<br>sudo wget -O /etc/yum.repos.d/jenkins.repo <a href="https://pkg.jenkins.io/redhat-stable/jenkins.repo" target="_blank" rel="noopener">https://pkg.jenkins.io/redhat-stable/jenkins.repo</a><br>sudo rpm –import <a href="https://pkg.jenkins.io/redhat-stable/jenkins.io.key" target="_blank" rel="noopener">https://pkg.jenkins.io/redhat-stable/jenkins.io.key</a><br>yum install jenkins</p>
-<p>service jenkins start<br>//失败<br>vim  /etc/init.d/jenkins<br>vim /etc/sysconfig/jenkins</p>
-<p>重启<br>systemctl daemon-reload<br>service jenkins start </p>
-<p>//成功<br>[root@instance-7k1d5qb8 ~]# service jenkins start<br>Starting jenkins (via systemctl):  [  OK  ]</p>
-<p>//访问失败<br>sudo yum install libgcc.i686 –setopt=protected_multilib=false<br>重启</p>
-<p>//安装插件失败<br>打开 <a href="http://ip:8080/pluginManager/advanced" target="_blank" rel="noopener">http://ip:8080/pluginManager/advanced</a> </p>
+<p>Jdk&amp;Maven安装点这<br>Docker 安装点这<br>SVN 安装使用点这</p>
+<h2 id="2-2配置Docker工作空间"><a href="#2-2配置Docker工作空间" class="headerlink" title="2.2配置Docker工作空间"></a>2.2配置Docker工作空间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建文件夹用来放docker工作空间</span></span><br><span class="line">mkdir /home/work/demo</span><br><span class="line"><span class="built_in">cd</span> /home/work/demo</span><br><span class="line"><span class="comment">#创建备份文件夹</span></span><br><span class="line">mkdir backup</span><br></pre></td></tr></table></figure>
+<p>然后添加Docker构造文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim Dockerfile</span><br></pre></td></tr></table></figure></p>
+<p>在文件中添加如下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#基于openjdk:8</span><br><span class="line">FROM openjdk:8</span><br><span class="line">#这里其他的项目，可以把demo改成其他的项目名称</span><br><span class="line">ADD demo-1.0-SNAPSHOT.jar demo.jar</span><br><span class="line">RUN bash -c &apos;touch /demo.jar&apos;</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/demo.jar&quot;]</span><br></pre></td></tr></table></figure></p>
+<p>添加shell脚本文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim run.sh</span><br></pre></td></tr></table></figure>
+<p>添加如下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义好这些变量，后面其他的项目，只需要改前面这些变量即可</span></span><br><span class="line">PROJECT_NAME=JenkinsDemo <span class="comment">#Maven项目名称</span></span><br><span class="line">IMAGE_NAME=demo  <span class="comment">#生成的镜像名称</span></span><br><span class="line">BASE_PATH=/home/work/demo <span class="comment">#Docker工作空间</span></span><br><span class="line">PORT=9120 <span class="comment">#端口</span></span><br><span class="line">TASK_NAME=Jenkins <span class="comment"># 任务名称</span></span><br><span class="line">SOURCE_PATH=/var/lib/jenkins/workspace/<span class="variable">$TASK_NAME</span>/target/ <span class="comment"># Jenkins生成jar包位置</span></span><br><span class="line"><span class="comment">#查看当前docker是否运行了该项目</span></span><br><span class="line">CID=$(docker ps | grep <span class="string">"<span class="variable">$IMAGE_NAME</span>"</span> | awk <span class="string">'&#123;print $1&#125;'</span>)</span><br><span class="line"> </span><br><span class="line">DATE=`date +%Y%m%d%H%M`</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 将jar包移动到工作空间</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">transfer</span></span>()&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"newest <span class="variable">$SOURCE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar moveto <span class="variable">$BASE_PATH</span> ...."</span></span><br><span class="line">        sudo cp <span class="variable">$SOURCE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar <span class="variable">$BASE_PATH</span>/<span class="variable">$IMAGE_NAME</span>-1.0-SNAPSHOT.jar</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"move complete"</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">backup</span></span>()&#123;</span><br><span class="line">        <span class="keyword">if</span> [ -f <span class="string">"<span class="variable">$BASE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar 开始备份"</span></span><br><span class="line">                sudo cp <span class="variable">$BASE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar <span class="variable">$BASE_PATH</span>/backup/<span class="variable">$PROJECT_NAME</span>-<span class="variable">$DATE</span>.jar</span><br><span class="line">                        sleep 3</span><br><span class="line">                        sudo rm -rf <span class="variable">$BASE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"备份完成"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"<span class="variable">$BASE_PATH</span>/<span class="variable">$PROJECT_NAME</span>-1.0-SNAPSHOT.jar not exists , pass "</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">#构建镜像</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">build</span></span>()&#123;</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"开始构建"</span></span><br><span class="line">        <span class="built_in">cd</span> <span class="variable">$BASE_PATH</span></span><br><span class="line">        sudo docker build -t <span class="variable">$IMAGE_NAME</span> .</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">#运行</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">run</span></span>()&#123;</span><br><span class="line">        backup</span><br><span class="line">        transfer</span><br><span class="line">        build</span><br><span class="line">        <span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$CID</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"存在，删除再运行"</span></span><br><span class="line">                        sudo docker stop <span class="variable">$CID</span></span><br><span class="line">                        sudo docker rm <span class="variable">$CID</span></span><br><span class="line">                        sudo docker run -d -p <span class="variable">$PORT</span>:<span class="variable">$PORT</span> <span class="variable">$IMAGE_NAME</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"complete"</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"不存在，直接运行"</span></span><br><span class="line">                        sudo docker run -d -p <span class="variable">$PORT</span>:<span class="variable">$PORT</span> <span class="variable">$IMAGE_NAME</span> </span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"create ok"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">#执行run方法</span></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<h1 id="三、-安装Jenkins"><a href="#三、-安装Jenkins" class="headerlink" title="三、 安装Jenkins"></a>三、 安装Jenkins</h1><h2 id="3-1-官网安装步骤如下："><a href="#3-1-官网安装步骤如下：" class="headerlink" title="3.1  官网安装步骤如下："></a>3.1  官网安装步骤如下：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加jenkins 源</span></span><br><span class="line">sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo</span><br><span class="line"></span><br><span class="line"><span class="comment">#导入key</span></span><br><span class="line">sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装</span></span><br><span class="line">yum install jenkins</span><br></pre></td></tr></table></figure>
+<p><img src="/jenkinsdown.png" alt="jenkinsdown"><br>不过通过yum安装的效果会比较慢，极端前端下仅几k的速度，因此可以把rpm包先下过来，然后通过rpm的方式安装</p>
+<h2 id="3-2-rpm方式安装如下："><a href="#3-2-rpm方式安装如下：" class="headerlink" title="3.2  rpm方式安装如下："></a>3.2  rpm方式安装如下：</h2><ul>
+<li>首先下载rpm包，可从<a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/redhat/" target="_blank" rel="noopener">清华镜像</a>下载,也可以从<a href="https://pan.baidu.com/s/1G0YISzKHvPgyFyBNvRWbeQ" target="_blank" rel="noopener">某云</a>提取码<code>w6tl</code>下载</li>
+<li>将rpm包上传至centos 中</li>
+<li>执行<code>rpm -ivh jenkins-2.204.2-1.1.noarch.rpm</code> 这个文件</li>
+</ul>
+<h2 id="3-3-启动jenkins"><a href="#3-3-启动jenkins" class="headerlink" title="3.3 启动jenkins"></a>3.3 启动jenkins</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service jenkins start</span><br></pre></td></tr></table></figure>
+<p>如果是自己安装的jdk，Jenkins第一次启动可能会报错，可以使用命令<code>systemctl status jenkins.server</code>来查看错误明细，可以看到错误信息提示<code>java: no such file or directory</code></p>
+<p><img src="/Jenkinsfail.png" alt="Jenkinsfail"></p>
+<p>执行如下命令：<code>vim  /etc/init.d/jenkins</code></p>
+<p>在<code>candidates</code>里面加上自己安装的jdk的java命令的位置，如下</p>
+<p><img src="/changejava.png" alt="changejava"></p>
+<p>然后重新加载配置文件<code>systemctl daemon-reload</code>后重启Jenkins</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service jenkins start</span><br></pre></td></tr></table></figure>
+<p>成功执行有如下提示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@instance-7k1d5qb8 ~]<span class="comment"># service jenkins start </span></span><br><span class="line">Starting jenkins (via systemctl):  [  OK  ]</span><br></pre></td></tr></table></figure>
+<h1 id="四、-访问Jenkins"><a href="#四、-访问Jenkins" class="headerlink" title="四、 访问Jenkins"></a>四、 访问Jenkins</h1><p>在浏览器打开地址<code>http://服务器ip:8080</code> ，不出意外就能进入到如下界面，然后根据提示输入密码：</p>
+<p><img src="/inputse.png" alt="inputse"></p>
+<p>输入密码之后会进入到如下界面，选择推荐的插件即可，就会进入到插件安装页面。</p>
+<p><img src="/installplug.png" alt="installplug"></p>
+<p>如若网络不好的情况下，可能会出现如下情况，安装插件失败</p>
+<p><img src="/installplugerror.png" alt="installplugerror"></p>
+<ul>
+<li>解决方法（1）如下</li>
+</ul>
+<p>打开 <a href="http://ip:8080/pluginManager/advanced" target="_blank" rel="noopener">http://ip:8080/pluginManager/advanced</a> </p>
+<p>最后站点设置</p>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a></p>
+<p>然后保存</p>
+<p><img src="/changesite.png" alt="changesite"></p>
+<ul>
+<li><p>解决方法（2）如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /var/lib/jenkins/hudson.model.UpdateCenter.xml</span><br></pre></td></tr></table></figure>
+<p>将 <a href="https://updates.jenkins.io/update-center.json&quot;" target="_blank" rel="noopener">https://updates.jenkins.io/update-center.json&quot;</a> 修改为</p>
+<p>“<a href="http://mirror.xmission.com/jenkins/updates/update-center.json&quot;" target="_blank" rel="noopener">http://mirror.xmission.com/jenkins/updates/update-center.json&quot;</a></p>
+</li>
+</ul>
+<p>然后<code>systemctl daemon-reload</code> 使配置生效，并重启Jenkins <code>systemctl restart jenkins</code></p>
+<h3 id="访问Jenkins出现的问题："><a href="#访问Jenkins出现的问题：" class="headerlink" title="访问Jenkins出现的问题："></a>访问Jenkins出现的问题：</h3><p><img src="/openjenkinserror.png" alt="openjenkinserror"></p>
+<p>可能是由于自己按照的jdk，少了一些基础程序，如下安装，重启即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install libgcc.i686 --<span class="built_in">setopt</span>=protected_multilib=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="五、配置Jenkins"><a href="#五、配置Jenkins" class="headerlink" title="五、配置Jenkins"></a>五、配置Jenkins</h1><p>插件安装成功之后会进入到如下界面，创建一个用户即可</p>
+<p><img src="/createuser.png" alt="createuser"></p>
+<p>使用账号密码登陆之后需要进行一些基础配置：</p>
+<p><img src="/gotoconfig.png" alt="gotoconfig"><br>选择<code>全局工具配置</code><br><img src="/configjdk.png" alt="configjdk"><br>此处主要配置maven、jdk、docker 三者配置相似，把<code>自动安装</code>的勾取消，便可以输入在系统中的位置。查看环境变量中位置如下：</p>
+<p><img src="/getjdkmavenpath.png" alt="getjdkmavenpath"></p>
+<p>而yum所安装的docker 位置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/lib/docker</span><br></pre></td></tr></table></figure>
+<h1 id="六、创建SpringBoot项目"><a href="#六、创建SpringBoot项目" class="headerlink" title="六、创建SpringBoot项目"></a>六、创建SpringBoot项目</h1><p>新建一个maven项目，项目名为<code>JenkinsDemo</code> 项目名在后续会用到</p>
+<p>pom依赖和插件如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">      &lt;artifactId&gt;spring-boot-parent&lt;/artifactId&gt;</span><br><span class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line">  </span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">      &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">  &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  &lt;build&gt;</span><br><span class="line">      &lt;plugins&gt;</span><br><span class="line">          &lt;plugin&gt;</span><br><span class="line">              &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">              &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">              &lt;version&gt;2.1.7.RELEASE&lt;/version&gt;</span><br><span class="line">              &lt;executions&gt;</span><br><span class="line">                  &lt;execution&gt;</span><br><span class="line">                      &lt;goals&gt;</span><br><span class="line">                          &lt;goal&gt;repackage&lt;/goal&gt;</span><br><span class="line">                      &lt;/goals&gt;</span><br><span class="line">                  &lt;/execution&gt;</span><br><span class="line">              &lt;/executions&gt;</span><br><span class="line">              &lt;configuration&gt;</span><br><span class="line">                  &lt;fork&gt;true&lt;/fork&gt;</span><br><span class="line">              &lt;/configuration&gt;</span><br><span class="line">          &lt;/plugin&gt;</span><br><span class="line">          &lt;plugin&gt;</span><br><span class="line">              &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">              &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">              &lt;version&gt;3.8.1&lt;/version&gt;</span><br><span class="line">              &lt;configuration&gt;</span><br><span class="line">                  &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                  &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">              &lt;/configuration&gt;</span><br><span class="line">          &lt;/plugin&gt;</span><br><span class="line">      &lt;/plugins&gt;</span><br><span class="line">  &lt;/build&gt;</span><br></pre></td></tr></table></figure></p>
+<p>application.yml 修改端口，默认8080会和Jenkins冲突，除非修改了Jenkins的端口<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9120</span></span><br></pre></td></tr></table></figure></p>
+<p>Controller类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/test"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"自动构建测试"</span> + LocalDateTime.now();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Main.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>项目基础结构搭建完成之后。</p>
+<h2 id="6-1-添加SVN控制"><a href="#6-1-添加SVN控制" class="headerlink" title="6.1 添加SVN控制"></a>6.1 添加SVN控制</h2><p><img src="/addsvn.png" alt="addsvn"></p>
+<p><img src="/sharesvn.png" alt="sharesvn"></p>
+<p>添加完版本控制之后，底端会有一个Version Control ，右键选择commit</p>
+<p><img src="/commit.png" alt="commit"></p>
+<p>勾选需要提交的文件夹或文件</p>
+<p><img src="/shouldcommit.png" alt="shouldcommit"></p>
+<p>提交完成之后，可以在svn管理软件中看到，此处使用小乌龟<br><img src="/insvn.png" alt="insvn"></p>
+<h1 id="七、新建任务"><a href="#七、新建任务" class="headerlink" title="七、新建任务"></a>七、新建任务</h1><p><img src="/newtask.png" alt="newtask"><br>输入名称<code>Jenkins</code>，选择<code>构建一个自由风格的软件项目</code> 确定，便进入到如下配置<br><img src="/general.png" alt="general"><br>勾选这个，以免产生过多的文件，导致服务器资源耗竭<br><img src="/srouce.png" alt="srouce"><br>添加svn，Jenkins会从这获取源码<br><img src="/creatauth.png" alt="creatauth"><br>svn当然需要添加账号密码<br><img src="/chufaqi.png" alt="chufaqi"><br>触发器，大概就是何时会进行构建，如若是变化不频繁的，可以不选，手动构建<br><img src="/goujianghuanjing.png" alt="goujianghuanjing"><br>这里仍然是删除之前的工作空间，避免代码冲突<br><img src="/goujiangxuanzemaven.png" alt="goujiangxuanzemaven"><br>因为我们的是Maven项目，所以选择Maven构建<br><img src="/mavenconfig.png" alt="mavenconfig"><br>Maven构建配置如上。配置文件也可以指定位置，最好指定修改了国内镜像的settings.xml 文件<br><img src="/execshell.png" alt="execshell"><br>后面选择执行shell脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /home/work/demo</span><br><span class="line"></span><br><span class="line">sudo ./run.sh</span><br></pre></td></tr></table></figure>
+<p>最后确定</p>
+<h2 id="7-1-构建查看输出"><a href="#7-1-构建查看输出" class="headerlink" title="7.1 构建查看输出"></a>7.1 构建查看输出</h2><p>项目构建成功首页如下所示，点击名称<code>Jenkins</code>查看该任务详情</p>
+<p><img src="/task.png" alt="task"></p>
+<p>里面的工作空间存放了从svn拉取的代码，下面的Build History 就是每次构建的记录</p>
+<p><img src="/detail.png" alt="detail"></p>
+<p>这里是看工作空间的代码<img src="/workspace.png" alt="workspace"></p>
+<p>点击Build History里面的某一项记录，可以进入到这里，然后点击<code>控制台输出</code>可以查看代码运行情况。</p>
+<p><img src="/selectConsole.png" alt="selectConsole"></p>
+<p>第一次运行输出往往会需要从maven下载各种依赖，如果比较慢的话，是否需要切换为国内镜像。</p>
+<p>下图的红圈中，</p>
+<p>第一部分表示Maven install 已经ok了 ； </p>
+<p>第二部分是开始执行shell命令 ； </p>
+<p>第三部分是执行Dockerfile 命令。</p>
+<p>如果在那个部分出了问题导致访问失败，可以对应排除。</p>
+<p><img src="/console.png" alt="console"></p>
+<p>如果一路顺利，⑧出意外的话，执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>便可以看到如下输出，表示该demo已经运行完成。</p>
+<p><img src="/runsuccess.png" alt="runsuccess"></p>
+<p>然后我们只需要在浏览器输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://ip:9120/test</span><br></pre></td></tr></table></figure>
+<p>便可以看到如下输出。然事与愿违，这个过程构建了好几次才搞定。后面有参考</p>
+<p><img src="/webok.png" alt="webok"></p>
+<h3 id="7-2-构建遇见的问题"><a href="#7-2-构建遇见的问题" class="headerlink" title="7.2 构建遇见的问题"></a>7.2 构建遇见的问题</h3><ol>
+<li><p><code>sudo: ./run.sh: command not found</code>  ，因为刚刚创建的run.sh文件没有赋予可执行权限</p>
+<p>​    在/home/work/demo 目录下执行如下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x run.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/添加可执行权限.png" alt="添加可执行权限"></p>
+</li>
+<li><p>各种no such directory , 根据控制台输出提示的部分，然后查看是哪个文件配置出错，然后处理</p>
+</li>
+<li><p><code>sudo: no tty present and no askpass program specified</code> 因为在shell文件中有sudo命令，但是权限又不够。</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在Jenkins宿主服务器上运行如下命令</span></span><br><span class="line">$ sudo visudo</span><br><span class="line"><span class="comment">#在文件的末尾加上一行</span></span><br><span class="line">jenkins ALL=(ALL) NOPASSWD: ALL</span><br><span class="line"><span class="comment">#保存文件（注意保存的时候修改文件名，文件名后缀不要加上默认的.tmp，即可覆盖原文件）</span></span><br><span class="line">Ctrl+O</span><br><span class="line"><span class="comment">#退出编辑</span></span><br><span class="line">Ctrl+X</span><br><span class="line"><span class="comment">#重启Jenkins服务</span></span><br><span class="line">/etc/init.d/jenkins restart</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="4">
+<li><p>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?</p>
+<p>​    重启docker 即可 <code>systemctl restart docker</code></p>
+</li>
+</ol>
+<h1 id="八、更新迭代"><a href="#八、更新迭代" class="headerlink" title="八、更新迭代"></a>八、更新迭代</h1><p>在Controller中添加如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/new"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">newMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"version 2"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后提交到svn</p>
+<p><img src="/svncommit.png" alt="svncommit"></p>
+<p>稍等一会待Jenkins自动构建</p>
+<p>然后在浏览器地址中输入<code>http://ip:9120/new</code>,不出意外便能出现一下结果。如果无：</p>
+<ol>
+<li>查看是否产生了构建，若无，点击<code>立即构建</code>手动</li>
+<li>查看构建记录中的控制台输出，根据不同的提示，解决不同的问题。</li>
+</ol>
+<p><img src="/version2.png" alt="version2"></p>
+<h1 id="九、总结"><a href="#九、总结" class="headerlink" title="九、总结"></a>九、总结</h1><p>这仅是Jenkins的简单使用，还有更过的高级用法暂未用到，学习记录倒是够了。</p>
+<p>1.这里用Jenkins做了什么？</p>
+<p>​    本地敲代码 -》 提交到SVN -》 Jenkins自动编译部署 -》访问网页</p>
+<p>2.Jenkins几个配置</p>
+<p>​    全局配置: Jdk、Maven、Docker</p>
+<p>​    任务配置: 代码源，如何构建</p>
 
       
     </div>
@@ -602,7 +727,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Jenkins介绍"><span class="nav-number">1.</span> <span class="nav-text">一、Jenkins介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、前置准备"><span class="nav-number">2.</span> <span class="nav-text">二、前置准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1服务器-Linux-所需环境"><span class="nav-number">2.1.</span> <span class="nav-text">2.1服务器(Linux)所需环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2安装JDK与Maven"><span class="nav-number">2.2.</span> <span class="nav-text">2.2安装JDK与Maven</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1获取压缩包"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1获取压缩包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-解压"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.3 解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-配置环境变量"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.4 配置环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5问题"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.2.5问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-总结"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-安装"><span class="nav-number">2.4.</span> <span class="nav-text">Docker 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Jenkins"><span class="nav-number">2.5.</span> <span class="nav-text">安装Jenkins</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Jenkins介绍"><span class="nav-number">1.</span> <span class="nav-text">一、Jenkins介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、前置准备"><span class="nav-number">2.</span> <span class="nav-text">二、前置准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1服务器-Linux-所需环境"><span class="nav-number">2.1.</span> <span class="nav-text">2.1服务器(Linux)所需环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2配置Docker工作空间"><span class="nav-number">2.2.</span> <span class="nav-text">2.2配置Docker工作空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、-安装Jenkins"><span class="nav-number">3.</span> <span class="nav-text">三、 安装Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-官网安装步骤如下："><span class="nav-number">3.1.</span> <span class="nav-text">3.1  官网安装步骤如下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-rpm方式安装如下："><span class="nav-number">3.2.</span> <span class="nav-text">3.2  rpm方式安装如下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-启动jenkins"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 启动jenkins</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、-访问Jenkins"><span class="nav-number">4.</span> <span class="nav-text">四、 访问Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Jenkins出现的问题："><span class="nav-number">4.0.1.</span> <span class="nav-text">访问Jenkins出现的问题：</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#五、配置Jenkins"><span class="nav-number">5.</span> <span class="nav-text">五、配置Jenkins</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、创建SpringBoot项目"><span class="nav-number">6.</span> <span class="nav-text">六、创建SpringBoot项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-添加SVN控制"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 添加SVN控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、新建任务"><span class="nav-number">7.</span> <span class="nav-text">七、新建任务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-构建查看输出"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 构建查看输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-构建遇见的问题"><span class="nav-number">7.1.1.</span> <span class="nav-text">7.2 构建遇见的问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、更新迭代"><span class="nav-number">8.</span> <span class="nav-text">八、更新迭代</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、总结"><span class="nav-number">9.</span> <span class="nav-text">九、总结</span></a></li></div>
             
 
           </div>
