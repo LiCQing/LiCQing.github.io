@@ -262,6 +262,213 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/installSVN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/20/installSVN/" itemprop="url">【Linux】Centos下安装SVN并将本地项目提交到SVN</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T10:22:51+08:00">
+                2020-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/02/20/installSVN/" class="leancloud_visitors" data-flag-title="【Linux】Centos下安装SVN并将本地项目提交到SVN">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>[TOC]</p>
+<h1 id="1、-安装"><a href="#1、-安装" class="headerlink" title="1、 安装"></a>1、 安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install subversion</span><br></pre></td></tr></table></figure>
+<p>创建仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/svnrepo  #创建仓库目录</span><br><span class="line">svnadmin create /home/svnrepo #指定为代码仓库</span><br><span class="line">cd /home/svnrepo #进入目录</span><br></pre></td></tr></table></figure></p>
+<p>有如下内容：</p>
+<p><img src="/svndir.png" alt="svndir"></p>
+<p>后续操作的配置文件均在<code>conf</code>目录下。</p>
+<h1 id="2、-配置"><a href="#2、-配置" class="headerlink" title="2、 配置"></a>2、 配置</h1><p>进入conf目录，查看文件，分别作用如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">authz # 权限配置文件 </span><br><span class="line">passwd  #账号密码配置文件</span><br><span class="line">svnserve.conf  #服务配置文件</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-1-配置用户"><a href="#2-1-配置用户" class="headerlink" title="2.1 配置用户"></a>2.1 配置用户</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim passwd</span><br></pre></td></tr></table></figure>
+<p>在<code>[users]</code>下面添加用户，添加格式为 <code>username = password</code></p>
+<p><img src="/adduser.png" alt="adduser"></p>
+<h2 id="2-2-配置用户组和权限"><a href="#2-2-配置用户组和权限" class="headerlink" title="2.2 配置用户组和权限"></a>2.2 配置用户组和权限</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim authz</span><br></pre></td></tr></table></figure>
+<p><code>[groups]</code>：为用户分组，根据项目，部门可以进行分组，配置格式如下</p>
+<blockquote>
+<p>groupname = username,username</p>
+</blockquote>
+<p><code>[仓库路径]</code>: 为仓库路径配置权限，如<code>/</code>是根路径，<code>/project1</code> 是项目1；如若细分可以继续分为项目的某个文件或文件夹。权限如下：</p>
+<blockquote>
+<p>r : 只读</p>
+<p>rw：读写</p>
+<p>空：不可读不可写</p>
+</blockquote>
+<p>指定用户规则如下：</p>
+<blockquote>
+<p>username：指定某个用户</p>
+<p>@groupname : 指定用户组</p>
+<p>*：其他用户</p>
+</blockquote>
+<p><img src="/configeauth.png" alt="configeauth"></p>
+<h2 id="2-3-配置svn"><a href="#2-3-配置svn" class="headerlink" title="2.3 配置svn"></a>2.3 配置svn</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim svnserve.conf</span><br></pre></td></tr></table></figure>
+<p>打开下面的5个注释</p>
+<blockquote>
+<p>anon-access = read #匿名用户可读<br>auth-access = write #授权用户可写<br>password-db = passwd #用户账号文件名<br>authz-db = authz #权限配置文件名<br>realm = /home/svnrepo # 仓库所在目录</p>
+</blockquote>
+<p><img src="/confserver.png" alt="confserver"></p>
+<h1 id="3、启动停止"><a href="#3、启动停止" class="headerlink" title="3、启动停止"></a>3、启动停止</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">svnserve -d -r /home/svnrepo #启动</span><br><span class="line">killall svnserve #停止</span><br></pre></td></tr></table></figure>
+<h1 id="4、客户端连接"><a href="#4、客户端连接" class="headerlink" title="4、客户端连接"></a>4、客户端连接</h1><p>客户端使用小乌龟<a href="https://tortoisesvn.net/downloads.html" target="_blank" rel="noopener">TortoiseSVN</a>连接，连接地址是：<code>svn://ip地址</code><br><img src="/connect.png" alt="connect"><br>这里使用admin登陆，因为现在连接的仓库路径默认是<code>/</code>，而配置里面对<code>/</code>的配置权限最大的是<code>admin</code></p>
+<p><img src="/auth.png" alt="auth"></p>
+<h1 id="5、导入项目"><a href="#5、导入项目" class="headerlink" title="5、导入项目"></a>5、导入项目</h1><h2 id="5-1、导入目录项目"><a href="#5-1、导入目录项目" class="headerlink" title="5.1、导入目录项目"></a>5.1、导入目录项目</h2><ul>
+<li>进入项目所在的目录</li>
+<li><p>设置忽略文件，比如Maven生成的target目录不需要上传、本地开发环境的配置。</p>
+<blockquote>
+<p>鼠标右键“TortoiseSVN”– &gt;“Settings”</p>
+<p>找到General中的”Global ignore pattern”<br>添加:target  *.settings  .classpath  .project<br><img src="/添加忽略文件.png" alt></p>
+</blockquote>
+</li>
+<li><p>继续<code>右键</code> –》<code>TortoiseSVN</code>–》<code>Import</code>导入项目到仓库<br><img src="/loacltoserve.png" alt="loacltoserve"></p>
+</li>
+<li>确认项目添加的仓库<br><img src="/confirmtoserver.png" alt="confirmtoserver"></li>
+<li>然后可以在svn管理中，看到刚刚上传的代码<br><img src="/成功上传到仓库.png" alt="成功上传到仓库"></li>
+</ul>
+<h3 id="添加版本管理"><a href="#添加版本管理" class="headerlink" title="添加版本管理"></a>添加版本管理</h3><p>如果需要继续管理代码版本，则把之前仓库的代码在<code>checkout</code>到当前目录，把原来没有版本控制的文件覆盖掉。<br><img src="/add.png" alt="add"><br>后续有代码变动，只需右键<code>commit</code>即可<br><img src="/成功.png" alt="成功"></p>
+<h2 id="5-2、导入IDEA项目"><a href="#5-2、导入IDEA项目" class="headerlink" title="5.2、导入IDEA项目"></a>5.2、导入IDEA项目</h2><p>如果是正在开发中的项目，或者是需要一边开发一边提交的情况，可以直接在IDEA添加版本控制。每当代码完成之后便可以提交到仓库中。（多人协同开发记得update再commit，不然会冲突；或者把别人的代码覆盖。</p>
+<ul>
+<li>将项目分享到SVN<br><img src="/share.png" alt="share"></li>
+<li>添加刚刚的仓库地址<br><img src="/addrepo.png" alt="addrepo"></li>
+<li>查看这个版本控制选项卡<br><img src="/vc.png" alt="vc"></li>
+<li>需要提交的代码勾选即可<br><img src="/按需提交.png" alt="按需提交"></li>
+<li>这里是使用IDEA提交的代码<br><img src="/result.png" alt="result"></li>
+</ul>
+<h1 id="6、总结"><a href="#6、总结" class="headerlink" title="6、总结"></a>6、总结</h1><ol>
+<li><p>svn如何配置</p>
+<p>使用<code>svnadmin create</code> 指定仓库路径之后会自动生成一些文件，其中配置文件在<code>conf</code>下。主要有如下配置：</p>
+<ul>
+<li>用户配置：passwd文件</li>
+<li>权限配置：authz文件</li>
+<li>服务配置：svnserve.conf文件</li>
+</ul>
+</li>
+<li><p>如何将本地项目添加svn管理</p>
+<ul>
+<li>文件目录中的代码，先import再checkout</li>
+<li>idea在VCS中share 到 svn</li>
+</ul>
+</li>
+<li><p>svn作为一个协同开发管理工具，还有很多需要学习的地方，包括版本号管理，发生冲突如何解决，如何进行分支开发等等。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/installdocker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1806,167 +2013,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/springmvcdownload/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Li">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="L">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/09/springmvcdownload/" itemprop="url">SpringMVC文件下载的两种方式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T16:55:39+08:00">
-                2019-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spring/" itemprop="url" rel="index">
-                    <span itemprop="name">spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/04/09/springmvcdownload/" class="leancloud_visitors" data-flag-title="SpringMVC文件下载的两种方式">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="SpringMVC-实现文件下载文件"><a href="#SpringMVC-实现文件下载文件" class="headerlink" title="SpringMVC 实现文件下载文件"></a>SpringMVC 实现文件下载文件</h3><p>利用程序实现下载需要设置两个报头：</p>
-<ul>
-<li>1．Web服务器需要告诉浏览器其所输出内容的类型不是普通文本文件或HTML文件，而是一个要保存到本地的下载文件。设置Content-Type 的值为：application/x-msdownload。</li>
-<li>2．Web服务器希望浏览器不直接处理相应的实体内容，而是由用户选择将相应的实体内容保存到一个文件中，这需要设置Content-Disposition报头。该报头指定了接收程序处理数据内容的方式，在HTTP应用中只有attachment是标准方式，attachment表示要求用户干预。在attachment后面还可以指定filename参数，该参数是服务器建议浏览器将实体内容保存到文件中的文件名称。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/09/springmvcdownload/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2019,7 +2065,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
